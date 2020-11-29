@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>API Testing</title>
+        <link href="css/style.css" rel="stylesheet" type="text/css"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="/main.js"></script>
+    </head>
+    <body>
+        <h1>API Testing</h1>
+        <hr>
+        <% imageUrlArray.forEach(function(imageUrl, i){ %>
+                <img src='<%= imageUrl %>' class='option' width='200' height='200' alt='Image unavailable'/><br>
+                <i><%= scienceNameArray[i] %><br></i>
+                <b><%= commonNameArray[i] %></b><br><br>
+            <% });%>
+       <script src="/main.js"></script>
+    </body>
+</html>

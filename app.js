@@ -2,6 +2,7 @@ const fetch = require('node-fetch');
 const express = require("express");
 const app = express();
 app.engine('html', require('ejs').renderFile);
+app.set("view engine", "ejs");
 app.use(express.static("public"));
 
 // routes
@@ -9,12 +10,34 @@ app.get("/", function(req, res){
     res.render("index.html"); 
 });
 
-// app cant access browser because it runs on server side,
+/* old proof of concept code
 app.get("/api/trefle", async function(req, res){
-    let apiUrl = "https://trefle.io/api/v1/plants?token=6t4ZVV4DE7bKaqSg1CDFPHq3r5giNXINF3qlk43Povk";
+    let apiUrl = 'https://trefle.io/api/v1/plants?token=6t4ZVV4DE7bKaqSg1CDFPHq3r5giNXINF3qlk43Povk';
     let response = await fetch(apiUrl);
     let data = await response.json();
     res.send(data);
+});
+*/
+
+app.get("/search", async function(req, res){
+    let keyword = "";
+    if (req.query.keyword){
+        keyword = req.query.keyword;
+        let apiUrl = `https://trefle.io/api/v1/plants/search?token=6t4ZVV4DE7bKaqSg1CDFPHq3r5giNXINF3qlk43Povk&q=${keyword}`;
+        let response = await fetch(apiUrl);
+        let data = await response.json();
+        data = data.data;
+        let imageUrlArray = [];
+        let commonNameArray = [];
+        let scienceNameArray = [];
+        for(let i = 0; i < data.length; i++)
+        {
+            imageUrlArray.push(data[i].image_url);
+            commonNameArray.push(data[i].common_name);
+            scienceNameArray.push(data[i].scientific_name);
+        }
+        res.render("results", {"imageUrlArray":imageUrlArray, "commonNameArray":commonNameArray, "scienceNameArray":scienceNameArray});
+    }
 });
 
 // database
