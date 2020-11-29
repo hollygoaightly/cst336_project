@@ -20,10 +20,10 @@ app.get("/api/trefle", async function(req, res){
 // database
 const mysql = require('mysql');
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'user',
-    password: 'password',
-    database: 'database name'
+    host: 'r1bsyfx4gbowdsis.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+    user: 'qc0w3lq0xdqs5ny3',
+    password: 'ea3ex48nw4hd4v3q',
+    database: 'sn1qvahom0zodcij'
 });
 connection.connect((err) => {
     if (err) throw err;
