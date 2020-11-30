@@ -4,7 +4,7 @@ const app = express();
 app.engine('html', require('ejs').renderFile);
 app.set("view engine", "ejs");
 app.use(express.static("public"));
-
+let plantData = new Map();
 //routes
 //root
 app.get("/", async (req, res) => {
@@ -76,7 +76,8 @@ app.get("/api/trefle", async function(req, res){
 });
 */
 
-app.get("/search", async function(req, res){
+app.get("/search", async (req, res) => {
+    plantData.clear();
     let keyword = "";
     if (req.query.keyword){
         keyword = req.query.keyword;
@@ -84,16 +85,29 @@ app.get("/search", async function(req, res){
         let response = await fetch(apiUrl);
         let data = await response.json();
         data = data.data;
+        let idArray = [];
         let imageUrlArray = [];
         let commonNameArray = [];
         let scienceNameArray = [];
         for(let i = 0; i < data.length; i++)
         {
+            idArray.push(data[i].id);
             imageUrlArray.push(data[i].image_url);
             commonNameArray.push(data[i].common_name);
             scienceNameArray.push(data[i].scientific_name);
+            
+            // for database
+            var plantObj = {
+            	id: data[i].id,
+            	common_name: data[i].common_name,
+            	family: data[i].family,
+            	genus: data[i].genus,
+            	image_url: data[i].image_url
+            };
+            
+            plantData.set(data[i].id, plantObj);
         }
-        res.render("results", {"imageUrlArray":imageUrlArray, "commonNameArray":commonNameArray, "scienceNameArray":scienceNameArray});
+        res.render("results", {"idArray":idArray, "imageUrlArray":imageUrlArray, "commonNameArray":commonNameArray, "scienceNameArray":scienceNameArray});
     }
 });
 
