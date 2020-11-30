@@ -1,0 +1,26 @@
+<!-- header.ejs partial - header, nav bar -->
+<%- include('partials/header.ejs') %>
+
+<!-- index.ejs - main content -->
+        <main>
+            <div id="regWindow">
+                <h3>Registration</h3>
+                <hr />
+                <form action="" method="POST">
+                    First Name:      <input type="text"     name="firstName" />
+                    Last Name:       <input type="text"     name="lastName" /><br /><br />
+                    Email:           <input type="text"     name="email" /><br /><br />
+                    User Name:       <input type="text"     name="loginName" id="userName" /><span id="feedbackLoginName"></span><br /><br />
+                    Password:        <input type="password" name="password"  id="password" /><span id="feedbackPassword"></span><br /><br />
+                    Retype Password: <input type="password" name="password2" id="password2" /><span id="feedbackPassword2" /></span><br /><br />
+                    Gender:          <input type="radio"    name="gender"    value="male"> Male <input type="radio" name="gender" value="female" /> Female<br /><br />
+                    <!-- zip code has pattern attr to ensure input is just 5 numbers -->
+                    Zip Code:        <input type="text"     name="zip"       pattern="[0-9]{5}" /><br /><br />
+                    <button>Submit</button>
+                </form>
+            </div>
+        </main>
+        
+        
+<!-- footer.ejs partial - footer -->
+<%- include('partials/footer.ejs') %>

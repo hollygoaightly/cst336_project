@@ -1,3 +1,59 @@
 .option:hover {
     box-shadow:10px 10px grey;
 }
+
+/* body styling - background, font, position, text alignment */
+body {
+    background-image: url('../img/pexels-element-digital-1470171.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top right;
+    background-attachment: fixed;
+    font-family: 'PT Sans', sans-serif;
+    text-align: center;
+}
+/* header.ejs partial - nav bar - font, bottom border */
+nav {
+    border-bottom: 2px solid green;
+    font-family: 'Gochi Hand', cursive;
+    font-size: 20px;
+    color: #48B166;
+    width: 100%;
+}
+/* header.ejs - nav bar - text element colors(default state) */ 
+nav a {
+    color: white;
+}
+/* header.ejs - nav bar - text element colors(hover state) */ 
+nav a:hover {
+    color: #6D3B63;
+}
+/* header.ejs - nav bar - set current page text element color */ 
+#currentPage {
+    color: #A35593;
+}
+/* index.ejs, register.ejs - positioning of main semantic tag */
+main {
+    /* fixes the issue with small height cutting off text at footer */
+    padding-bottom: 200px;
+    margin: 10% 20% auto;
+}
+/* index.ejs - intro paragraph, background */
+main p {
+    font-size: 28px;
+    background-color: rgba(255,255,255,0.75);
+}
+/* footer.ejs partial - top border, font size, position, width  */
+footer {
+    border-top: 2px solid green;
+    font-size: 12px;
+    position: fixed;
+    width: 100%;
+    bottom: 0%;
+    list-style-position: inside;
+}
+/* register.ejs , signIn.ejs - background and font */
+#regWindow, #signInWindow {
+    font-size: 14px;
+    background-color: rgba(255,255,255,0.75);
+}

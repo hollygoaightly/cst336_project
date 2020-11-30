@@ -1,0 +1,19 @@
+<!-- header.ejs partial - header, nav bar -->
+<%- include('partials/header.ejs') %>
+
+<!-- index.ejs - main content -->
+        <main>
+            <div id="signInWindow">
+                <h3>Sign In</h3>
+                <hr />
+                <form action="" method="POST">
+                    UseName:  <input type="text"     name="loginName" id="userName" /><span id="feedbackLoginName"></span><br /><br />
+                    Password: <input type="password" name="password"  id="password" /><span id="feedbackPassword"></span><br /><br />
+                    <button>Submit</button>
+                </form>
+            </div>
+        </main>
+        
+        
+<!-- footer.ejs partial - footer -->
+<%- include('partials/footer.ejs') %>

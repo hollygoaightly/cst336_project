@@ -5,10 +5,67 @@ app.engine('html', require('ejs').renderFile);
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 
-// routes
-app.get("/", function(req, res){
+//routes
+//root
+app.get("/", async (req, res) => {
+	res.render("home", {
+		"isHomeCurrent":"id=currentPage",
+		"isYPCurrent":"",
+		"isPTCurrent":"",
+		"isSICurrent":"",
+		"isRegCurrent":""
+	}); //render
+}); //root
+
+//yourPlants
+app.get("/yourplants", async (req, res) => {
+	res.render("yourPlants", {
+		"isHomeCurrent":"",
+		"isYPCurrent":"id=currentPage",
+		"isPTCurrent":"",
+		"isSICurrent":"",
+		"isRegCurrent":""
+	}); //render
+}); //yourPlants
+
+//plantTalk
+app.get("/plantTalk", async (req, res) => {
+	res.render("plantTalk", {
+		"isHomeCurrent":"",
+		"isYPCurrent":"",
+		"isPTCurrent":"id=currentPage",
+		"isSICurrent":"",
+		"isRegCurrent":""
+	}); //render
+}); //plantTalk
+
+//signIn
+app.get("/signIn", async (req, res) => {
+	res.render("signIn", {
+		"isHomeCurrent":"",
+		"isYPCurrent":"",
+		"isPTCurrent":"",
+		"isSICurrent":"id=currentPage",
+		"isRegCurrent":""
+	}); //render
+}); //signIn
+
+//register
+app.get("/register", async (req, res) => {
+	res.render("register", {
+		"isHomeCurrent":"",
+		"isYPCurrent":"",
+		"isPTCurrent":"",
+		"isSICurrent":"",
+		"isRegCurrent":"id=currentPage"
+	}); //render
+}); //register
+
+//api testing page
+app.get("/test", function(req, res){
     res.render("index.html"); 
-});
+});//api testing page
+
 
 /* old proof of concept code
 app.get("/api/trefle", async function(req, res){

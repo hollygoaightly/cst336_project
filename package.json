@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "start":"nodemon app",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hollygoaightly/cst336_project.git"
