@@ -4,11 +4,16 @@
 <!-- index.ejs - main content -->
         <main>
             <div id="signInWindow">
+                        <% if (typeof error !== "undefined" && error) { %>
+                        <div class="alert alert-primary fade show" role="alert">
+                          <strong>Holy guacamole! </strong> <%= error %> 
+                        </div>
+                        <% } %>
                 <h3>Sign In</h3>
                 <hr />
-                <form action="" method="POST">
-                    UseName:  <input type="text"     name="loginName" id="userName" /><span id="feedbackLoginName"></span><br /><br />
-                    Password: <input type="password" name="password"  id="password" /><span id="feedbackPassword"></span><br /><br />
+                <form action="/signIn" method="POST">
+                    UseName:  <input type="text"     name="login" id="login" />
+                    Password: <input type="password" name="password"  id="password" /><br /><br />
                     <button>Submit</button>
                 </form>
             </div>
