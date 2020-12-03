@@ -41,13 +41,7 @@ const ifLoggedin = (req,res,next) => {
 //routes
 //root
 app.get("/", async (req, res) => {
-	res.render("home", {
-		"isHomeCurrent":"id=currentPage",
-		"isYPCurrent":"",
-		"isPTCurrent":"",
-		"isSICurrent":"",
-		"isRegCurrent":""
-	}); //render
+	res.render("home"); //render
 }); //root
 
 //yourPlants : requires login
@@ -55,37 +49,18 @@ app.get("/yourplants", ifNotLoggedin, (req,res,next) => {
     connection.query("SELECT `FirstName` FROM `Login` WHERE `LoginId`= ?",
     [req.session.login_id], ( err, rows ) => {
     if (err) throw err;
-	res.render("yourPlants", {
-		"isHomeCurrent":"",
-		"isYPCurrent":"id=currentPage",
-		"isPTCurrent":"",
-		"isSICurrent":"",
-		"isRegCurrent":"",
-		name: rows[0].FirstName
-	}); //render
+	res.render("yourPlants", {name: rows[0].FirstName}); //render
     }); // connection query : get firstname from db
 }); //yourPlants
 
 //plantTalk
 app.get("/plantTalk", async (req, res) => {
-	res.render("plantTalk", {
-		"isHomeCurrent":"",
-		"isYPCurrent":"",
-		"isPTCurrent":"id=currentPage",
-		"isSICurrent":"",
-		"isRegCurrent":""
-	}); //render
+	res.render("plantTalk"); //render
 }); //plantTalk
 
 //signIn
 app.get("/signIn", async (req, res) => {
-	res.render("signIn", {
-		"isHomeCurrent":"",
-		"isYPCurrent":"",
-		"isPTCurrent":"",
-		"isSICurrent":"id=currentPage",
-		"isRegCurrent":""
-	}); //render
+	res.render("signIn"); //render
 }); //signIn
 
 app.post("/signIn", function(req, res) {
@@ -94,22 +69,12 @@ app.post("/signIn", function(req, res) {
   let password = req.body.password;
 
   if (!validator.lengthValid(login, 5, 200) || !validator.lengthValid(password, 8, 20)) {
-    res.render('signIn', {error: 'login or pass invalid',
-        "isHomeCurrent":"",
-		"isYPCurrent":"",
-		"isPTCurrent":"",
-		"isSICurrent":"id=currentPage",
-		"isRegCurrent":""
-    });
+    res.render('signIn', {error: 'login or pass invalid'});
   } else {
     connection.query("SELECT * FROM `Login` WHERE `LoginName` = ?", login, (error, result) => {
       if (error) throw error;
       if (result.length === 0) {
-        res.render('signIn', {error: 'No such user',"isHomeCurrent":"",
-		"isYPCurrent":"",
-		"isPTCurrent":"",
-		"isSICurrent":"id=currentPage",
-		"isRegCurrent":""});
+        res.render('signIn', {error: 'No such user'});
       } else {
         let user = result[0];
         bcrypt.compare(password, user['HashedPwd'], (error, result) => {
@@ -120,11 +85,7 @@ app.post("/signIn", function(req, res) {
             req.session.logged_in = true;
             res.redirect('/');
           } else {
-            res.render('signIn', {error: 'Wrong password',"isHomeCurrent":"",
-		"isYPCurrent":"",
-		"isPTCurrent":"",
-		"isSICurrent":"id=currentPage",
-		"isRegCurrent":""});
+            res.render('signIn', {error: 'Wrong password'});
           }
         })
       }
@@ -134,13 +95,7 @@ app.post("/signIn", function(req, res) {
 
 //register
 app.get("/register", async (req, res) => {
-	res.render("register", {
-		"isHomeCurrent":"",
-		"isYPCurrent":"",
-		"isPTCurrent":"",
-		"isSICurrent":"",
-		"isRegCurrent":"id=currentPage"
-	}); //render
+	res.render("register"); //render
 }); //register
 
 app.post('/register', function(req, res) {
@@ -157,44 +112,20 @@ app.post('/register', function(req, res) {
   // an field is missing
   if (!validator.lengthValid(login, 5, 200) || !validator.lengthValid(password, 8, 20))
   {
-    res.render('register', {error: 'Invalid login or password length',"isHomeCurrent":"",
-		"isYPCurrent":"",
-		"isPTCurrent":"",
-		"isSICurrent":"",
-		"isRegCurrent":"id=currentPage"});
+    res.render('register', {error: 'Invalid login or password length'});
   } else if (!validator.lengthValid(email, 5, 200)) {
-    res.render('register', {error: 'Invalid email length',"isHomeCurrent":"",
-		"isYPCurrent":"",
-		"isPTCurrent":"",
-		"isSICurrent":"",
-		"isRegCurrent":"id=currentPage"});
+    res.render('register', {error: 'Invalid email length'});
   } else if (!validator.isEmail(email)) { // Wrong format
-    res.render('register', {error: 'Wrong email format',"isHomeCurrent":"",
-		"isYPCurrent":"",
-		"isPTCurrent":"",
-		"isSICurrent":"",
-		"isRegCurrent":"id=currentPage"});
+    res.render('register', {error: 'Wrong email format'});
   } else if (!validator.alphabetOnly(login)) {
-    res.render('register', {error: 'Only alphanumeric logins allowed',"isHomeCurrent":"",
-		"isYPCurrent":"",
-		"isPTCurrent":"",
-		"isSICurrent":"",
-		"isRegCurrent":"id=currentPage"});
+    res.render('register', {error: 'Only alphanumeric logins allowed'});
   } else if (password !== re_password) {
-    res.render('register', {error: 'Passwords do not match',"isHomeCurrent":"",
-		"isYPCurrent":"",
-		"isPTCurrent":"",
-		"isSICurrent":"",
-		"isRegCurrent":"id=currentPage"});
+    res.render('register', {error: 'Passwords do not match'});
   } else {
         // Check if email exists
         connection.query("SELECT * FROM Login WHERE Email=?", [email], function (error, result) {
             if (error) throw error;
-            if (result.length > 0) { res.render('register', {error: 'This email already exists',"isHomeCurrent":"",
-		"isYPCurrent":"",
-		"isPTCurrent":"",
-		"isSICurrent":"",
-		"isRegCurrent":"id=currentPage"}); }
+            if (result.length > 0) { res.render('register', {error: 'This email already exists'}); }
             else {
               bcrypt.genSalt(10, function(error, salt) {
                 if (error) throw error;
@@ -202,11 +133,7 @@ app.post('/register', function(req, res) {
                   if (error) throw error;
                   connection.query("INSERT INTO Login (LoginName, HashedPwd, Email, FirstName, LastName, Gender, ZipCode) VALUES (?, ?, ?, ?, ?, ?, ?)",
                   [login, hash, email, fname, lname, gender, zip], function(error, result) {
-                  res.render('register', {message: `You have been registered, try logging in`,"isHomeCurrent":"",
-		"isYPCurrent":"",
-		"isPTCurrent":"",
-		"isSICurrent":"",
-		"isRegCurrent":"id=currentPage"});
+                  res.render('register', {message: `You have been registered, try logging in`});
                   });
                 });
               });

@@ -14,14 +14,4 @@
     <body>
 <!-- header.ejs partial - navigation area -->
             <nav class="navbar navbar-expand-sm bg-dark">
-                <span class="navbar-brand"><img src="img/Branch2_3.png" height="30" alt="leaf" />Green House</span>
-                <a class="nav-link" <%= isHomeCurrent %> href="/">Home</a>
-                <a class="nav-link" <%= isYPCurrent %> href="/yourPlants">Your Plants</a>
-                <!-- mr-auto needed to push sign and register to the right -->
-                <a class="nav-link  mr-auto" <%= isPTCurrent %> href="/plantTalk">Plant Talk</a>
-                <!-- API testing page from master branch -->
-                <a class="nav-link" href="/test">API Testing - index.html</a>
-                
-                <a class="nav-link" <%= isSICurrent %> href="/signIn">Sign In</a>
-                <a class="nav-link" <%= isRegCurrent %> href="/register">Register</a>
             </nav>
