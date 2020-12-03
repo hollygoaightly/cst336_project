@@ -9,6 +9,11 @@
                   <strong>Holy guacamole! </strong> <%= error %> 
                 </div>
                 <% } %>
+                <% if (typeof message !== "undefined" && message) {%>
+                <div class="alert alert-info fade show" role="alert">
+                  <strong><%= message %></strong>
+                </div>
+                <% } %>
                 <h3>Registration</h3>
                 <hr />
                 <form action="/register" method="POST">
