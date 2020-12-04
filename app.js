@@ -53,11 +53,6 @@ app.get("/yourplants", ifNotLoggedin, (req,res,next) => {
     }); // connection query : get firstname from db
 }); //yourPlants
 
-//plantTalk
-app.get("/plantTalk", async (req, res) => {
-	res.render("plantTalk"); //render
-}); //plantTalk
-
 //signIn
 app.get("/signIn", async (req, res) => {
 	res.render("signIn"); //render

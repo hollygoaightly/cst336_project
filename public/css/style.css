@@ -57,3 +57,37 @@ footer {
     font-size: 14px;
     background-color: rgba(255,255,255,0.75);
 }
+/* yourPlants.ejs - positioning of main semantic tag */
+#yourPlantsPage {
+    padding-bottom: 200px;
+    margin: 5% 5% auto;
+}
+/* yourPlants.ejs - primary container for all plantObjs */
+/* display properties and justification of flex items */
+.yourPlantsContainer {
+    /* remove border when submitting. Just for debugging. */
+    /*border: 1px solid black;*/
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:center;
+}
+/* yourPlants.ejs - container for 2 instances of plantProperties */
+/* display properties and styling */
+.plantObj {
+    /* remove border when submitting. Just for debugging. */
+    /*border: 1px solid black;*/
+    display: flex;
+    width: 500px;
+    border: 1px solid black;
+    margin: 10px;
+    background-color: rgba(255,255,255);
+}
+/* yourPlants.ejs - plantProperties contains either plant properties or the notes/buttons */
+/* font and display stlying */
+#plantProperties {
+    /* remove border when submitting. Just for debugging. */
+    /*border: 1px solid black;*/
+    margin: 5px;
+    width: 250px;
+    font-size: 14px;
+}
