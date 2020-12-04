@@ -45,11 +45,15 @@ app.get("/", async (req, res) => {
 }); //root
 
 app.get("/api/insertPlant", function(req, res){
-  let sql = "INSERT INTO `Plant` (TrefleId, Common_Name, Family, Genus, Image_Url) VALUES (?,?,?,?,?)";
-  let sqlParams = [req.query.id, req.query.common_name, req.query.family, req.query.genus, req.query.image_url];
+  let sql = "INSERT IGNORE INTO `Plant` (TrefleId, Common_Name, Scientific_Name, Family, Genus, Image_Url) VALUES (?,?,?,?,?,?)";
+  let sqlParams = [req.query.id,
+    decodeURIComponent(req.query.common_name),
+    decodeURIComponent(req.query.scientific_name),
+    decodeURIComponent(req.query.family),
+    decodeURIComponent(req.query.genus),
+    decodeURIComponent(req.query.image_url)];
   connection.query(sql, sqlParams, function (err, rows, fields) {
     if (err) throw err;
-    console.log(rows);
     res.send(rows.affectedRows.toString() + " inserted");
   });
 });
@@ -174,12 +178,14 @@ app.get("/search", async (req, res) => {
         let commonNameArray = [];
         let scienceNameArray = [];
         let genusArray = [];
+        let familyNameArray = [];
         for(let i = 0; i < data.length; i++)
         {
             idArray.push(data[i].id);
             imageUrlArray.push(data[i].image_url);
             commonNameArray.push(data[i].common_name);
             scienceNameArray.push(data[i].scientific_name);
+            familyNameArray.push(data[i].family);
             genusArray.push(data[i].genus);
             
             // for database
@@ -188,12 +194,13 @@ app.get("/search", async (req, res) => {
             	common_name: data[i].common_name,
             	family: data[i].family,
             	genus: data[i].genus,
-            	image_url: data[i].image_url
+            	image_url: data[i].image_url,
+            	scientific_name: data[i].scientific_name
             };
             
             plantData.set(data[i].id, plantObj);
         }
-        res.render("results", {"idArray":idArray, "imageUrlArray":imageUrlArray, "commonNameArray":commonNameArray, "scienceNameArray":scienceNameArray, "genusArray":genusArray});
+        res.render("results", {"idArray":idArray, "imageUrlArray":imageUrlArray, "commonNameArray":commonNameArray, "scienceNameArray":scienceNameArray,"familyNameArray": familyNameArray, "genusArray":genusArray});
     }
 });
 
