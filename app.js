@@ -44,6 +44,16 @@ app.get("/", async (req, res) => {
 	res.render("home"); //render
 }); //root
 
+app.get("/api/insertPlant", function(req, res){
+  let sql = "INSERT INTO `Plant` (TrefleId, Common_Name, Family, Genus, Image_Url) VALUES (?,?,?,?,?)";
+  let sqlParams = [req.query.id, req.query.common_name, req.query.family, req.query.genus, req.query.image_url];
+  connection.query(sql, sqlParams, function (err, rows, fields) {
+    if (err) throw err;
+    console.log(rows);
+    res.send(rows.affectedRows.toString() + " inserted");
+  });
+});
+
 //yourPlants : requires login
 app.get("/yourplants", ifNotLoggedin, (req,res,next) => {
     connection.query("SELECT `FirstName` FROM `Login` WHERE `LoginId`= ?",
@@ -168,12 +178,14 @@ app.get("/search", async (req, res) => {
         let imageUrlArray = [];
         let commonNameArray = [];
         let scienceNameArray = [];
+        let genusArray = [];
         for(let i = 0; i < data.length; i++)
         {
             idArray.push(data[i].id);
             imageUrlArray.push(data[i].image_url);
             commonNameArray.push(data[i].common_name);
             scienceNameArray.push(data[i].scientific_name);
+            genusArray.push(data[i].genus);
             
             // for database
             var plantObj = {
@@ -186,7 +198,7 @@ app.get("/search", async (req, res) => {
             
             plantData.set(data[i].id, plantObj);
         }
-        res.render("results", {"idArray":idArray, "imageUrlArray":imageUrlArray, "commonNameArray":commonNameArray, "scienceNameArray":scienceNameArray});
+        res.render("results", {"idArray":idArray, "imageUrlArray":imageUrlArray, "commonNameArray":commonNameArray, "scienceNameArray":scienceNameArray, "genusArray":genusArray});
     }
 });
 

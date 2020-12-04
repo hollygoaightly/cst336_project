@@ -10,7 +10,7 @@
         <h1>API Testing</h1>
         <hr>
         <% imageUrlArray.forEach(function(imageUrl, i){ %>
-                <img src='<%= imageUrl %>' id='<%= idArray[i] %>' class='option' width='200' height='200' alt='Image unavailable'/><br>
+                <img src='<%= imageUrl %>' id='<%= idArray[i] %>' class='option' width='200' height='200' alt='<%= genusArray[i] %>'/><br>
                 <i><%= scienceNameArray[i] %><br></i>
                 <b><%= commonNameArray[i] %></b><br><br>
             <% });%>
