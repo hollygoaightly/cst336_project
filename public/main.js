@@ -2,8 +2,8 @@
 window.onload = function(){
 
     //menu related vars
-    const menuNames = ["Home","Your Plants","Plant Talk","API Testing - index.html","Sign In","Register"];
-    const menuHref = ["/","/yourPlants","/plantTalk","/test","/signIn","/register"];
+    const menuNames = ["Home","Your Plants","API Testing - index.html","Sign In","Register"];
+    const menuHref = ["/","/yourPlants","/test","/signIn","/register"];
     //load menu
     loadMenu(location.pathname);
 
@@ -14,13 +14,13 @@ window.onload = function(){
         //menu items
         for(let i = 0 ; i < menuNames.length ; i++) {
             if(menuItem == menuHref[i]) { 
-                if(i == 2) { 
+                if(i == 1) { 
                     $(".navbar").append(`<a class='nav-link mr-auto currentPage' href='${menuHref[i]}'>${menuNames[i]}</a>`); 
                 } else { 
                     $(".navbar").append(`<a class='nav-link currentPage' href='${menuHref[i]}'>${menuNames[i]}</a>`);
                 } //inner if else
             } else {
-                if(i == 2) { 
+                if(i == 1) { 
                     $(".navbar").append(`<a class='nav-link mr-auto' href='${menuHref[i]}'>${menuNames[i]}</a>`);
                 } else {
                     $(".navbar").append(`<a class='nav-link' href='${menuHref[i]}'>${menuNames[i]}</a>`);        
