@@ -54,7 +54,19 @@ app.get("/api/insertPlant", function(req, res){
     decodeURIComponent(req.query.image_url)];
   connection.query(sql, sqlParams, function (err, rows, fields) {
     if (err) throw err;
-    res.send(rows.affectedRows.toString() + " inserted");
+    if (rows.affectedRows == 0)
+    {
+      sql = "SELECT PlantId FROM `Plant` WHERE TrefleId = ?";
+      connection.query(sql, [req.query.id], function (err, rows2, fields) {
+        if (err) throw err;
+        res.send(JSON.stringify(rows2));
+      });
+    }
+    else
+    {
+      res.send(JSON.stringify([{PlantId: rows.insertId}]));
+    }
+    
   });
 });
 
