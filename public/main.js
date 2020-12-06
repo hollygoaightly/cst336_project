@@ -36,6 +36,10 @@ window.onload = function(){
 };
 
 async function addToYourPlants(id){
-   let url = `/api/addToYourPlants?plantId=${id[0]}&genus=${id[2]}&scienceName=${id[3]}&familyName=${id[4]}&commonName=${id[5]}`;
+   let url = `/api/insertPlant?id=${id[0]}&image_url=${id[1]}&genus=${id[2]}&scientific_name=${id[3]}&family=${id[4]}&common_name=${id[5]}`;
    await fetch(url);
+   let url2 = `/api/insertLoginPlant?id=${id[0]}`;
+   //await fetch(url2);
+   let url3 = "/yourPlants";
+   await fetch(url3);
 }

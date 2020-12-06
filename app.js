@@ -70,6 +70,35 @@ app.get("/api/insertPlant", function(req, res){
   });
 });
 
+app.get("/api/insertLoginPlant", function(req, res){
+  if(req.session.logged_in){
+    // check if plant is already in collection
+    connection.query("SELECT * FROM LoginPlant WHERE LoginId=? AND PlantId=?", [req.session.login_id, decodeURIComponent(req.query.id)], function (error, result) {
+      if (error) throw error;
+      if (result.length > 0) { res.render('results', {error: 'This plant is already in your collection!'}); }
+      else {
+        let sql = "INSERT INTO `LoginPlant` (LoginId, PlantId, SortOrder) VALUES (?,?,?)";
+        let sqlParams = [req.session.login_id,
+          decodeURIComponent(req.query.id),
+          1];
+        connection.query(sql, sqlParams, function (err, rows, fields) {
+          if (err) throw err;
+          if (rows.affectedRows == 0)
+          {
+              res.send("0 rows affected ");
+          }
+          else
+          {
+            res.send("it worked");
+          }
+          
+        });
+    
+      }
+    });
+  }
+});
+
 //yourPlants : requires login
 app.get("/yourplants", ifNotLoggedin, (req,res,next) => {
     connection.query("SELECT `FirstName` FROM `Login` WHERE `LoginId`= ?",
@@ -212,30 +241,6 @@ app.get("/search", async (req, res) => {
         let isVisible = (req.session.logged_in)? "": "hidden";
         res.render("results", {"idArray":idArray, "imageUrlArray":imageUrlArray, "commonNameArray":commonNameArray, "scienceNameArray":scienceNameArray,"familyNameArray": familyNameArray, "genusArray":genusArray, "isVisible": isVisible});
     }
-});
-
-// addToYourPlants
-app.get("/api/addToYourPlants", async (req, res) => {
-  let id = req.query.plantId;
-  //let imageUrl = req.query.imageUrl;
-  let genus = req.query.genus;
-  let scienceName = req.query.scienceName;
-  let familyName = req.query.familyName;
-  let commonName = req.query.commonName;
-  // check if plant is already in collection
-  connection.query("SELECT * FROM LoginPlant WHERE PlantId=?", [id], function (error, result) {
-    if (error) throw error;
-    if (result.length > 0) { res.render('results', {error: 'This plant is already in your collection!'}); }
-    /*
-    else {
-      connection.query("INSERT INTO LoginPlant (LoginId, PlantId) VALUES (?, ?)",
-      [req.session.login_id, id], function(error, result) {
-        res.render('yourPlants');
-      });
-    }
-    */
-    res.render('yourPlants');
-  });
 });
 
 // starting server
