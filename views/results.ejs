@@ -3,9 +3,9 @@
 <!-- index.ejs - main content -->
         <br><br>
         <% imageUrlArray.forEach(function(imageUrl, i){ %>
-            <img src='<%= imageUrl %>' width='200' height='200' alt='<%= genusArray[i] %>'/><br>
-            <i><%= scienceNameArray[i] %> Family: <%= familyNameArray[i] %><br></i>
-            <b><%= commonNameArray[i] %></b><br>
+            <img src='<%= imageUrl %>' width='200' alt='<%= genusArray[i] %>'/><br>
+            <i>Scientific: <%= scienceNameArray[i] %> Family: <%= familyNameArray[i] %><br></i>
+            Common name: <b><%= commonNameArray[i] %></b> Genus: <b><%= genusArray[i] %></b><br>
             <button <%= isVisible %> id='<%= idArray[i] %>;<%= imageUrl %>;<%= genusArray[i] %>;<%= scienceNameArray[i] %>;<%= familyNameArray[i] %>;<%= commonNameArray[i] %>;' class='option'>Add to plants</button>
             <br><br>
         <% });%>
