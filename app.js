@@ -209,8 +209,33 @@ app.get("/search", async (req, res) => {
             
             plantData.set(data[i].id, plantObj);
         }
-        res.render("results", {"idArray":idArray, "imageUrlArray":imageUrlArray, "commonNameArray":commonNameArray, "scienceNameArray":scienceNameArray,"familyNameArray": familyNameArray, "genusArray":genusArray});
+        let isVisible = (req.session.logged_in)? "": "hidden";
+        res.render("results", {"idArray":idArray, "imageUrlArray":imageUrlArray, "commonNameArray":commonNameArray, "scienceNameArray":scienceNameArray,"familyNameArray": familyNameArray, "genusArray":genusArray, "isVisible": isVisible});
     }
+});
+
+// addToYourPlants
+app.get("/api/addToYourPlants", async (req, res) => {
+  let id = req.query.plantId;
+  //let imageUrl = req.query.imageUrl;
+  let genus = req.query.genus;
+  let scienceName = req.query.scienceName;
+  let familyName = req.query.familyName;
+  let commonName = req.query.commonName;
+  // check if plant is already in collection
+  connection.query("SELECT * FROM LoginPlant WHERE PlantId=?", [id], function (error, result) {
+    if (error) throw error;
+    if (result.length > 0) { res.render('results', {error: 'This plant is already in your collection!'}); }
+    /*
+    else {
+      connection.query("INSERT INTO LoginPlant (LoginId, PlantId) VALUES (?, ?)",
+      [req.session.login_id, id], function(error, result) {
+        res.render('yourPlants');
+      });
+    }
+    */
+    res.render('yourPlants');
+  });
 });
 
 // starting server

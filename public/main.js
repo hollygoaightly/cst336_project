@@ -28,24 +28,14 @@ window.onload = function(){
             }  //if else
         } //for
     }//loadMenu
-
-    $(".option").on("click", doSomething);
+    
+    $(".option").on("click", function(){
+        const id = $(this).attr("id").split(";", 6);
+        addToYourPlants(id);
+    });
 };
 
-function doSomething(){
-    alert("testing");
+async function addToYourPlants(id){
+   let url = `/api/addToYourPlants?plantId=${id[0]}&genus=${id[2]}&scienceName=${id[3]}&familyName=${id[4]}&commonName=${id[5]}`;
+   await fetch(url);
 }
-
-/*
-async function fetchData(){
-   let url = "/api/trefle";  
-   let response = await fetch(url);    
-   let data = await response.json();
-   data = data.data;
-   var output = "";
-    for(let i = 0; i < data.length; i++){
-        output += `<img src='${data[i].image_url}' width='200' height='200'/>` + '<br><i>' + data[i].scientific_name +'</i><br/><b>' + data[i].common_name + '</b><br/><br/>';
-    }
-    $("#data").html(output);
-}
-*/

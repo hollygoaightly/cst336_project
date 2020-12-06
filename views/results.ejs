@@ -3,9 +3,11 @@
 <!-- index.ejs - main content -->
         <br><br>
         <% imageUrlArray.forEach(function(imageUrl, i){ %>
-            <img src='<%= imageUrl %>' id='<%= idArray[i] %>' class='option' width='200' height='200' alt='<%= genusArray[i] %>'/><br>
+            <img src='<%= imageUrl %>' width='200' height='200' alt='<%= genusArray[i] %>'/><br>
             <i><%= scienceNameArray[i] %> Family: <%= familyNameArray[i] %><br></i>
-            <b><%= commonNameArray[i] %></b><br><br>
+            <b><%= commonNameArray[i] %></b><br>
+            <button <%= isVisible %> id='<%= idArray[i] %>;<%= imageUrl %>;<%= genusArray[i] %>;<%= scienceNameArray[i] %>;<%= familyNameArray[i] %>;<%= commonNameArray[i] %>;' class='option'>Add to plants</button>
+            <br><br>
         <% });%>
         <br><br>
         <br><br>
