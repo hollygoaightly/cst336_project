@@ -2,8 +2,8 @@
 window.onload = function(){
 
     //menu related vars
-    const menuNames = ["Home","Your Plants","Plant Talk","API Testing - index.html","Sign In","Register"];
-    const menuHref = ["/","/yourPlants","/plantTalk","/test","/signIn","/register"];
+    const menuNames = ["Home","Your Plants","Plant Talk","Find Plants","Sign In","Register"];
+    const menuHref = ["/","/yourPlants","/plantTalk","/findPlants","/signIn","/register"];
     //load menu
     loadMenu(location.pathname);
 

@@ -167,20 +167,12 @@ app.post('/register', function(req, res) {
   }
 });
 
-//api testing page
-app.get("/test", function(req, res){
-    res.render("index.html"); 
-});//api testing page
-
-/* old proof of concept code
-app.get("/api/trefle", async function(req, res){
-    let apiUrl = 'https://trefle.io/api/v1/plants?token=6t4ZVV4DE7bKaqSg1CDFPHq3r5giNXINF3qlk43Povk';
-    let response = await fetch(apiUrl);
-    let data = await response.json();
-    res.send(data);
+//findPlants
+app.get("/findPlants", async (req, res) => {
+	res.render("findPlants"); //render
 });
-*/
 
+//search for plants
 app.get("/search", async (req, res) => {
     plantData.clear();
     let keyword = "";
