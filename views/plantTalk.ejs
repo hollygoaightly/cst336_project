@@ -7,12 +7,17 @@
 
 <!--form for submitting yourPlant to plantTalk -->
                 <form action="/submitPlant">
-                    <select id="usersPlant" name="usersPlant">
-                        <option value="null">Please select a plant.</option>
-                        <option value="You posted on Plant Talk.">Common Name Plant</option>
-                        <option value="You posted on Plant Talk.">Common Name Plant 2</option>
+                    <div class="form-group">
+                    <select class="form-control" id="usersPlant" name="usersPlant">
                     </select>
+                    <input type="text" class="form-control" name="topic" placeholder="Topic" size="100" />
+                    <textarea type="text" class="form-control" name="posttext" placeholder="Your post text" rows="4"></textarea>
+                    <div class="form-group">
+                        <label for="file1">Attach an image</label>
+                        <input type="file" class="form-control-file" id="file1">
+                      </div>
                     <button>Post Your Plant</button><br /><br />
+                    </div>
                 </form>
 <!--form for submitting yourPlant to plantTalk -->
 
@@ -146,3 +151,19 @@
         
 <!-- footer.ejs partial - footer -->
 <%- include('partials/footer.ejs') %>
+<script>
+    /*global fetch $ */
+    $(document).ready(function() {
+            populateMyPlants();
+
+            async function populateMyPlants() {
+                let url = `/api/getMyPlants`;
+                let response = await fetch(url);
+                let data = await response.json();
+                $("#usersPlant").html("<option> Select a plant to post about </option>");
+                for (let i=0; i< data.length; i++) {
+                    $("#usersPlant").append(`<option value="${data[i].PlantId}"> ${data[i].Common_Name} </option>`);
+                }
+            }
+    }); // form load
+</script>

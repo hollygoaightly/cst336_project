@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const express = require("express");
+const multer = require('multer');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const app = express();
