@@ -75,23 +75,15 @@ app.get("/api/insertLoginPlant", function(req, res){
     // check if plant is already in collection
     connection.query("SELECT * FROM LoginPlant WHERE LoginId=? AND PlantId=?", [req.session.login_id, decodeURIComponent(req.query.id)], function (error, result) {
       if (error) throw error;
-      if (result.length > 0) { console.log('This plant is already in your collection!'); }
+      if (result.length > 0) { res.send('This plant is already in your collection!'); }
       else {
         let sql = "INSERT INTO `LoginPlant` (LoginId, PlantId) VALUES (?,?)";
         let sqlParams = [req.session.login_id,req.query.id];
         connection.query(sql, sqlParams, function (err, rows, fields) {
           if (err) throw err;
-          if (rows.affectedRows == 0)
-          {
-              console.log('0 rows affected');
-          }
-          else
-          {
-            console.log('This plant was added to your collection.');
-          }
-          
+          console.log(rows);
+          res.send('Your collection has been updated!');
         });
-    
       }
     });
   }

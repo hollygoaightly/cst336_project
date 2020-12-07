@@ -17,6 +17,7 @@ window.onload = function(){
     
     $(".option").on("click", function(){
         const id = $(this).attr("id").split(";", 6);
+        $(this).disabled = true;
         addToYourPlants(id);
     });
 };
@@ -27,7 +28,7 @@ async function addToYourPlants(id){
    let data = await response.json();
    let PlantId = data[0].PlantId;
    let url2 = `/api/insertLoginPlant?id=${PlantId}`;
-   await fetch(url2);
-   let url3 = "/yourPlants";
-   await fetch(url3);
+   let response2 = await fetch(url2);
+   let text = await response2.text();
+   alert(text);
 }
