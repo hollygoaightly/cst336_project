@@ -3,10 +3,146 @@
 
 <!-- index.ejs - main content -->
         <main>
-            <h3>Posts</h3>
+            <p>Posts</p>
+
+<!--form for submitting yourPlant to plantTalk -->
+                <form action="/submitPlant">
+                    <select id="usersPlant" name="usersPlant">
+                        <option value="null">Please select a plant.</option>
+                        <option value="You posted on Plant Talk.">Common Name Plant</option>
+                        <option value="You posted on Plant Talk.">Common Name Plant 2</option>
+                    </select>
+                    <button>Post Your Plant</button><br /><br />
+                </form>
+<!--form for submitting yourPlant to plantTalk -->
+
+<!-- plantTalkContainer start -->
+            <div class="plantTalkContainer">
+<!-- plantTalkObj start -->
+                <div id="plantTalkObj">
+<!-- plantTalkUserPlant start -->
+                    <div id="plantTalkUserPlant">
+                        <span id="plantTalkObjects"></span>
+                        <h5>Post by: Username</h5>
+                        <h5>Post Date: 12/3/2020</h5>
+                        <img src="img/Branch2_3.png" height="100" alt="leaf" /><br />
+                        Common Name: my id=plantProperties<br />
+                        Scientific Name: Plant 1 Attrib<br />
+                        Family: Plant 1 Attrib<br />
+                        Genus: Plant 1 Attrib<br />
+                        USDA Hardiness Zone: Plant 1 Attrib<br />
+                        Watering Frequency: Plant 1 Attrib<br />
+                        Soil Used: Plant 1 Attrib<br />
+                        Light Exposure: Plant 1 Attrib<br />
+                        Fertilization: Plant 1 Attrib<br />
+                        User Notes:<br />
+                        <textarea name="comment" rows="4" cols="25" readonly> id=plantProperties Water the plant every other day.</textarea>
+                    </div>
+<!-- plantTalkUserPlant end -->
+<!-- plantTalkComments start -->
+                    <div id="plantTalkComments">
+                        <p>Comments</p>
+                        <span id="plantTalkUserComments">
+                            Date: 12/3/2020<br />
+                            User: asdasd<br />
+                            You posted on Plant Talk.<br /><br />
+                            Date: 12/3/2020<br />
+                            User: bob<br />
+                            Wow, you've done a great job!<br /><br />
+                        </span>
+                        <form action="/addCommment">
+                            <input type="text" name="userComments" size="125" /><br />
+                            <button>Post a Comment</button><br /><br />
+                        </form>
+                    </div>
+<!-- plantTalkComments end -->
+                </div><br /><br />
+<!-- plantTalkObj end -->
+<!-- plantTalkObj start -->
+                <div id="plantTalkObj">
+<!-- plantTalkUserPlant start -->
+                    <div id="plantTalkUserPlant">
+                        <span id="plantTalkObjects"></span>
+                        <h5>Post by: Username</h5>
+                        <h5>Post Date: 12/3/2020</h5>
+                        <img src="img/Branch2_3.png" height="100" alt="leaf" /><br />
+                        Common Name: my id=plantProperties<br />
+                        Scientific Name: Plant 1 Attrib<br />
+                        Family: Plant 1 Attrib<br />
+                        Genus: Plant 1 Attrib<br />
+                        USDA Hardiness Zone: Plant 1 Attrib<br />
+                        Watering Frequency: Plant 1 Attrib<br />
+                        Soil Used: Plant 1 Attrib<br />
+                        Light Exposure: Plant 1 Attrib<br />
+                        Fertilization: Plant 1 Attrib<br />
+                        User Notes:<br />
+                        <textarea name="comment" rows="4" cols="25" readonly> id=plantProperties Water the plant every other day.</textarea>
+                    </div>
+<!-- plantTalkUserPlant end -->
+<!-- plantTalkComments start -->
+                    <div id="plantTalkComments">
+                        <p>Comments</p>
+                        <span id="plantTalkUserComments">
+                            Date: 12/3/2020<br />
+                            User: asdasd<br />
+                            You posted on Plant Talk.<br /><br />
+                            Date: 12/3/2020<br />
+                            User: bob<br />
+                            Wow, you've done a great job!<br /><br />
+                        </span>
+                        <form action="/addCommment">
+                            <input type="text" name="userComments" size="125" /><br />
+                            <button>Post a Comment</button><br /><br />
+                        </form>
+                    </div>
+<!-- plantTalkComments end -->
+                </div><br /><br />
+<!-- plantTalkObj end -->
+<!-- plantTalkObj start -->
+                <div id="plantTalkObj">
+<!-- plantTalkUserPlant start -->
+                    <div id="plantTalkUserPlant">
+                        <span id="plantTalkObjects"></span>
+                        <h5>Post by: Username</h5>
+                        <h5>Post Date: 12/3/2020</h5>
+                        <img src="img/Branch2_3.png" height="100" alt="leaf" /><br />
+                        Common Name: my id=plantProperties<br />
+                        Scientific Name: Plant 1 Attrib<br />
+                        Family: Plant 1 Attrib<br />
+                        Genus: Plant 1 Attrib<br />
+                        USDA Hardiness Zone: Plant 1 Attrib<br />
+                        Watering Frequency: Plant 1 Attrib<br />
+                        Soil Used: Plant 1 Attrib<br />
+                        Light Exposure: Plant 1 Attrib<br />
+                        Fertilization: Plant 1 Attrib<br />
+                        User Notes:<br />
+                        <textarea name="comment" rows="4" cols="25" readonly> id=plantProperties Water the plant every other day.</textarea>
+                    </div>
+<!-- plantTalkUserPlant end -->
+<!-- plantTalkComments start -->
+                    <div id="plantTalkComments">
+                        <p>Comments</p>
+                        <span id="plantTalkUserComments">
+                            Date: 12/3/2020<br />
+                            User: asdasd<br />
+                            You posted on Plant Talk.<br /><br />
+                            Date: 12/3/2020<br />
+                            User: bob<br />
+                            Wow, you've done a great job!<br /><br />
+                        </span>
+                        <form action="/addCommment">
+                            <input type="text" name="userComments" size="125" /><br />
+                            <button>Post a Comment</button><br /><br />
+                        </form>
+                    </div>
+<!-- plantTalkComments end -->
+                </div><br /><br />
+<!-- plantTalkObj end -->
+
+            </div>
+<!-- plantTalkContainer end -->  
 
         </main>
-        
         
 <!-- footer.ejs partial - footer -->
 <%- include('partials/footer.ejs') %>

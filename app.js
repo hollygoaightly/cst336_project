@@ -41,7 +41,7 @@ const ifLoggedin = (req,res,next) => {
 //routes
 //root
 app.get("/", async (req, res) => {
-	res.render("home"); //render
+	res.render("home",{"isLoggedIn":req.session.logged_in}); //render
 }); //root
 
 app.get("/api/insertPlant", function(req, res){
@@ -104,18 +104,18 @@ app.get("/yourplants", ifNotLoggedin, (req,res,next) => {
     connection.query("SELECT `FirstName` FROM `Login` WHERE `LoginId`= ?",
     [req.session.login_id], ( err, rows ) => {
     if (err) throw err;
-	res.render("yourPlants", {name: rows[0].FirstName}); //render
+	res.render("yourPlants", {"isLoggedIn":req.session.logged_in, name: rows[0].FirstName}); //render
     }); // connection query : get firstname from db
 }); //yourPlants
 
 //plantTalk
 app.get("/plantTalk", async (req, res) => {
-	res.render("plantTalk"); //render
+	res.render("plantTalk",{"isLoggedIn":req.session.logged_in}); //render
 }); //plantTalk
 
 //signIn
 app.get("/signIn", async (req, res) => {
-	res.render("signIn"); //render
+	res.render("signIn",{"isLoggedIn":req.session.logged_in}); //render
 }); //signIn
 
 app.post("/signIn", function(req, res) {
@@ -198,8 +198,14 @@ app.post('/register', function(req, res) {
 
 //findPlants
 app.get("/findPlants", async (req, res) => {
-	res.render("findPlants"); //render
+	res.render("findPlants",{"isLoggedIn":req.session.logged_in}); //render
 });
+
+//logout
+app.get("/signout", (req,res) => {
+  req.session.destroy();
+  res.redirect("/");
+}); //logout
 
 //search for plants
 app.get("/search", async (req, res) => {

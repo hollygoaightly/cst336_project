@@ -91,3 +91,31 @@ footer {
     width: 250px;
     font-size: 14px;
 }
+/* plantTalk.ejs - plantTalkContainer contains all the plantTalkObjects */
+/* display stlying */
+.plantTalkContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+/* plantTalk.ejs - plantTalkObj contains all the user's plantTalkUserPlant and
+plantTalkComments. */
+/* display stlying */
+.plantTalkObj {
+    display: flex;
+    flex-direction: column;
+}
+/* plantTalk.ejs - plantTalkUserPlant holds the information for a plant object that was posted. */
+/* display and font stlying */
+#plantTalkUserPlant {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    font-size: 12px; 
+}
+/* plantTalk.ejs - plantTalkComments holds the information for the comments for a post. */
+/* display font stlying */
+#plantTalkComments {
+    text-align:left;
+    border-bottom: 1px solid black;
+    font-size: 12px;   
+}
