@@ -99,9 +99,17 @@ app.get("/yourplants", ifNotLoggedin, (req,res,next) => {
 }); //yourPlants
 
 //plantTalk
-app.get("/plantTalk", async (req, res) => {
+app.get("/plantTalk", ifNotLoggedin, async (req, res) => {
 	res.render("plantTalk",{"isLoggedIn":req.session.logged_in}); //render
 }); //plantTalk
+
+app.get("/api/getMyPlants",  function(req, res) {
+  let sql = "SELECT * FROM LoginPlant lp INNER JOIN Plant p on p.PlantId = lp.PlantId Where lp.LoginId = ? ORDER BY SortOrder";
+  connection.query(sql, [req.session.login_id], function (err, rows) {
+     if (err) throw err;
+     res.send(rows);
+  });  
+});//getMyPlants
 
 //signIn
 app.get("/signIn", async (req, res) => {
