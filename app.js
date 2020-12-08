@@ -3,6 +3,7 @@ const express = require("express");
 const multer = require('multer');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
+const path = require('path');
 const app = express();
 app.engine('html', require('ejs').renderFile);
 app.set("view engine", "ejs");
@@ -11,7 +12,40 @@ app.use(express.json());       // to support JSON-encoded bodies
 app.use(express.urlencoded({ extended: true })); // to support URL-encoded bodies
 
 const validator = require('./public/js/validator.js');
-const connection = require('./dbPool.js')
+const connection = require('./dbPool.js');
+
+// Set The Storage Engine
+const storage = multer.diskStorage({
+  destination: './public/uploads/',
+  filename: function(req, file, cb){
+    cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
+// Check File Type
+function checkFileType(file, cb){
+  // Allowed ext
+  const filetypes = /jpeg|jpg|png|gif/;
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  // Check mime
+  const mimetype = filetypes.test(file.mimetype);
+
+  if(mimetype && extname){
+    return cb(null,true);
+  } else {
+    cb('Error: Images Only!');
+  }
+}
+
+// Init Upload
+const upload = multer({
+  storage: storage,
+  limits:{fileSize: 1000000},
+  fileFilter: function(req, file, cb){
+    checkFileType(file, cb);
+  }
+});
 
 app.use(session({
   secret: 'aloe vera',
@@ -103,6 +137,27 @@ app.get("/yourplants", ifNotLoggedin, (req,res,next) => {
 app.get("/plantTalk", ifNotLoggedin, async (req, res) => {
 	res.render("plantTalk",{"isLoggedIn":req.session.logged_in}); //render
 }); //plantTalk
+
+//plantTalk post
+app.post("/plantTalk", upload.single('file1'), function (req, res, next) {
+  const file = req.file;
+  if (!file) {
+    const error = new Error('Please upload a file');
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+      
+	let topic = req.body.topic;
+  let posttext = req.body.posttext;
+  let plantid = req.body.usersPlant;
+  let filepath = req.file.path;
+
+  connection.query("INSERT INTO Post (PlantId, PostDte, Topic, PostText, Image_Url, LoginId) VALUES (?, CURRENT_TIMESTAMP(), ?, ?, ?, ?)",
+                  [plantid, topic, posttext, filepath, req.session.login_id], function (err, rows, fields) {
+          if (err) throw err;
+          res.render('plantTalk', {message: `You post was published successfully.`});
+        });
+}); //plantTalk post
 
 app.get("/api/getMyPlants",  function(req, res) {
   let sql = "SELECT * FROM LoginPlant lp INNER JOIN Plant p on p.PlantId = lp.PlantId Where lp.LoginId = ? ORDER BY SortOrder";
