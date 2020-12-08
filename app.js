@@ -166,6 +166,24 @@ app.get("/api/getMyPlants",  function(req, res) {
   });  
 });//getMyPlants
 
+// get Plant Talk posts
+app.get("/api/getPosts",  function(req, res) {
+  let sql = "SELECT p.PostId, p.PlantId, p.PostDte, p.Topic, p.PostText, p.Image_Url, l.LoginName, pl.Common_Name, pl.Scientific_Name, pl.Family, pl.Genus, lp.Hardiness, lp.WaterFrequency, lp.Soil, lp.LightExposure, lp.Description FROM Post p INNER JOIN Login l on p.LoginId = l.LoginId INNER JOIN LoginPlant lp on p.LoginId = lp.LoginId AND p.PlantId = lp.PlantId  INNER JOIN Plant pl on p.PlantId = pl.PlantId ORDER BY PostDte DESC";
+  pool.query(sql, function (err, rows) {
+     if (err) console.log(err);
+     res.send(rows);
+  });  
+});
+
+// get Plant Talk comments
+app.get("/api/getComments",  function(req, res) {
+  let sql = "SELECT * FROM Comment c INNER JOIN Login l on c.LoginId = l.LoginId ORDER BY CommentDte DESC";
+  pool.query(sql, function (err, rows) {
+     if (err) console.log(err);
+     res.send(rows);
+  });  
+});
+
 //signIn
 app.get("/signIn", async (req, res) => {
 	res.render("signIn",{"isLoggedIn":req.session.logged_in}); //render

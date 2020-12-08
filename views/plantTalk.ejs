@@ -28,126 +28,6 @@
 
 <!-- plantTalkContainer start -->
             <div class="plantTalkContainer">
-<!-- plantTalkObj start -->
-                <div id="plantTalkObj">
-<!-- plantTalkUserPlant start -->
-                    <div id="plantTalkUserPlant">
-                        <span id="plantTalkObjects"></span>
-                        <h5>Post by: Username</h5>
-                        <h5>Post Date: 12/3/2020</h5>
-                        <img src="img/Branch2_3.png" height="100" alt="leaf" /><br />
-                        Common Name: my id=plantProperties<br />
-                        Scientific Name: Plant 1 Attrib<br />
-                        Family: Plant 1 Attrib<br />
-                        Genus: Plant 1 Attrib<br />
-                        USDA Hardiness Zone: Plant 1 Attrib<br />
-                        Watering Frequency: Plant 1 Attrib<br />
-                        Soil Used: Plant 1 Attrib<br />
-                        Light Exposure: Plant 1 Attrib<br />
-                        Fertilization: Plant 1 Attrib<br />
-                        User Notes:<br />
-                        <textarea name="comment" rows="4" cols="25" readonly> id=plantProperties Water the plant every other day.</textarea>
-                    </div>
-<!-- plantTalkUserPlant end -->
-<!-- plantTalkComments start -->
-                    <div id="plantTalkComments">
-                        <p>Comments</p>
-                        <span id="plantTalkUserComments">
-                            Date: 12/3/2020<br />
-                            User: asdasd<br />
-                            You posted on Plant Talk.<br /><br />
-                            Date: 12/3/2020<br />
-                            User: bob<br />
-                            Wow, you've done a great job!<br /><br />
-                        </span>
-                        <form action="/addCommment">
-                            <input type="text" name="userComments" size="125" /><br />
-                            <button>Post a Comment</button><br /><br />
-                        </form>
-                    </div>
-<!-- plantTalkComments end -->
-                </div><br /><br />
-<!-- plantTalkObj end -->
-<!-- plantTalkObj start -->
-                <div id="plantTalkObj">
-<!-- plantTalkUserPlant start -->
-                    <div id="plantTalkUserPlant">
-                        <span id="plantTalkObjects"></span>
-                        <h5>Post by: Username</h5>
-                        <h5>Post Date: 12/3/2020</h5>
-                        <img src="img/Branch2_3.png" height="100" alt="leaf" /><br />
-                        Common Name: my id=plantProperties<br />
-                        Scientific Name: Plant 1 Attrib<br />
-                        Family: Plant 1 Attrib<br />
-                        Genus: Plant 1 Attrib<br />
-                        USDA Hardiness Zone: Plant 1 Attrib<br />
-                        Watering Frequency: Plant 1 Attrib<br />
-                        Soil Used: Plant 1 Attrib<br />
-                        Light Exposure: Plant 1 Attrib<br />
-                        Fertilization: Plant 1 Attrib<br />
-                        User Notes:<br />
-                        <textarea name="comment" rows="4" cols="25" readonly> id=plantProperties Water the plant every other day.</textarea>
-                    </div>
-<!-- plantTalkUserPlant end -->
-<!-- plantTalkComments start -->
-                    <div id="plantTalkComments">
-                        <p>Comments</p>
-                        <span id="plantTalkUserComments">
-                            Date: 12/3/2020<br />
-                            User: asdasd<br />
-                            You posted on Plant Talk.<br /><br />
-                            Date: 12/3/2020<br />
-                            User: bob<br />
-                            Wow, you've done a great job!<br /><br />
-                        </span>
-                        <form action="/addCommment">
-                            <input type="text" name="userComments" size="125" /><br />
-                            <button>Post a Comment</button><br /><br />
-                        </form>
-                    </div>
-<!-- plantTalkComments end -->
-                </div><br /><br />
-<!-- plantTalkObj end -->
-<!-- plantTalkObj start -->
-                <div id="plantTalkObj">
-<!-- plantTalkUserPlant start -->
-                    <div id="plantTalkUserPlant">
-                        <span id="plantTalkObjects"></span>
-                        <h5>Post by: Username</h5>
-                        <h5>Post Date: 12/3/2020</h5>
-                        <img src="img/Branch2_3.png" height="100" alt="leaf" /><br />
-                        Common Name: my id=plantProperties<br />
-                        Scientific Name: Plant 1 Attrib<br />
-                        Family: Plant 1 Attrib<br />
-                        Genus: Plant 1 Attrib<br />
-                        USDA Hardiness Zone: Plant 1 Attrib<br />
-                        Watering Frequency: Plant 1 Attrib<br />
-                        Soil Used: Plant 1 Attrib<br />
-                        Light Exposure: Plant 1 Attrib<br />
-                        Fertilization: Plant 1 Attrib<br />
-                        User Notes:<br />
-                        <textarea name="comment" rows="4" cols="25" readonly> id=plantProperties Water the plant every other day.</textarea>
-                    </div>
-<!-- plantTalkUserPlant end -->
-<!-- plantTalkComments start -->
-                    <div id="plantTalkComments">
-                        <p>Comments</p>
-                        <span id="plantTalkUserComments">
-                            Date: 12/3/2020<br />
-                            User: asdasd<br />
-                            You posted on Plant Talk.<br /><br />
-                            Date: 12/3/2020<br />
-                            User: bob<br />
-                            Wow, you've done a great job!<br /><br />
-                        </span>
-                        <form action="/addCommment">
-                            <input type="text" name="userComments" size="125" /><br />
-                            <button>Post a Comment</button><br /><br />
-                        </form>
-                    </div>
-<!-- plantTalkComments end -->
-                </div><br /><br />
-<!-- plantTalkObj end -->
 
             </div>
 <!-- plantTalkContainer end -->  
@@ -160,6 +40,7 @@
     /*global fetch $ */
     $(document).ready(function() {
             populateMyPlants();
+            populatePosts();
 
             async function populateMyPlants() {
                 let url = `/api/getMyPlants`;
@@ -169,6 +50,68 @@
                 for (let i=0; i< data.length; i++) {
                     $("#usersPlant").append(`<option value="${data[i].PlantId}"> ${data[i].Common_Name} </option>`);
                 }
+            }
+            
+            async function populatePosts() {
+                // get posts
+                let postUrl = `/api/getPosts`;
+                let postResponse = await fetch(postUrl);
+                let postData = await postResponse.json();
+            
+                // get comments
+                let commentUrl = `/api/getComments`;
+                let commentsResponse = await fetch(commentUrl);
+                let commentData = await commentsResponse.json();
+                // map comments list to post
+                var map = {};
+                for (let i=0; i< postData.length; i++) {
+                    var key = postData[i].PostId;
+                    map[key] = [];
+                }
+                for (let i=0; i< commentData.length; i++) {
+                    var key = commentData[i].PostId;
+                    map[key].push(commentData[i]);
+                }
+    
+                $(".plantTalkContainer").html("");
+                for (let i=0; i< postData.length; i++) {
+                    key = postData[i].PostId;
+                    $(".plantTalkContainer").append(`<div id="plantTalkObj">`);
+                        $(".plantTalkContainer").append(`<div id="plantTalkUserPlant">`);
+                            $(".plantTalkContainer").append(`<span id="plantTalkObjects"></span>`);
+                            $(".plantTalkContainer").append(`<h5>Post by: ${postData[i].LoginName}</h5>`);
+                            $(".plantTalkContainer").append(`<h5>Post Date: ${postData[i].PostDte}</h5>`);
+                            $(".plantTalkContainer").append(`<img src="${postData[i].Image_Url}" height="100" alt="No Image" /><br />`);
+                            $(".plantTalkContainer").append(`Common Name: ${postData[i].Common_Name}<br />`);
+                            $(".plantTalkContainer").append(`Scientific Name: ${postData[i].Scientific_Name}<br />`);
+                            $(".plantTalkContainer").append(`Family: ${postData[i].Family}<br />`);
+                            $(".plantTalkContainer").append(`Genus: ${postData[i].Genus}<br />`);
+                            $(".plantTalkContainer").append(`USDA Hardiness Zone: ${postData[i].Hardiness}<br />`);
+                            $(".plantTalkContainer").append(`Watering Frequency: ${postData[i].WaterFrequency}<br />`);
+                            $(".plantTalkContainer").append(`Soil Used: ${postData[i].Soil}<br />`);
+                            $(".plantTalkContainer").append(`Light Exposure: ${postData[i].LightExposure}<br />`);
+                            $(".plantTalkContainer").append(`Fertilization: ${postData[i].Fertilization}<br />`);
+                            $(".plantTalkContainer").append(`User Notes: ${postData[i].Description}<br />`);
+                            $(".plantTalkContainer").append(`<textarea name="comment" rows="4" cols="25" readonly>${postData[i].PostText}</textarea>`);
+                        $(".plantTalkContainer").append(`</div>`);
+                        $(".plantTalkContainer").append(`<div id="plantTalkComments">`);
+                            $(".plantTalkContainer").append(`<p>Comments</p>`);
+                            $(".plantTalkContainer").append(`<span id="plantTalkUserComments">`);
+                            for (let j=0; j< map[key].length; j++){
+                                let comment = map[key][i];
+                                    $(".plantTalkContainer").append(`Date: ${comment.CommentDte}<br />`); 
+                                     $(".plantTalkContainer").append(`User: ${comment.LoginName}<br />`);
+                                     $(".plantTalkContainer").append(`${comment.CommentText}<br /><br />`);
+                            } 
+                             $(".plantTalkContainer").append(`</span><br />`);
+                             $(".plantTalkContainer").append(`<form action="/addCommment">`);
+                                 $(".plantTalkContainer").append(`<input type="text" name="userComments" size="125" /><br />`);
+                                 $(".plantTalkContainer").append(`<button>Post a Comment</button><br /><br />`);
+                             $(".plantTalkContainer").append(`</form>`);
+                         $(".plantTalkContainer").append(`</div>`);
+                     $(".plantTalkContainer").append(`</div><br /><br />`);
+                }
+                 $(".plantTalkContainer").append(`</div><br /><br />`);
             }
     }); // form load
 </script>
