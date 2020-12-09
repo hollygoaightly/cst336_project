@@ -140,22 +140,41 @@ app.get("/plantTalk", ifNotLoggedin, async (req, res) => {
 //plantTalk post
 app.post("/plantTalk", upload.single('file1'), function (req, res, next) {
   const file = req.file;
-  if (!file) {
-    const error = new Error('Please upload a file');
-    error.httpStatusCode = 400;
-    return next(error);
-  }
-      
-	let topic = req.body.topic;
+  let topic = req.body.topic;
   let posttext = req.body.posttext;
   let plantid = req.body.usersPlant;
-  let filepath = req.file.path;
-
-  pool.query("INSERT INTO Post (PlantId, PostDte, Topic, PostText, Image_Url, LoginId) VALUES (?, CURRENT_TIMESTAMP(), ?, ?, ?, ?)",
+  if (!file) {
+    //const error = new Error('Please upload a file');
+    //error.httpStatusCode = 400;
+    //return next(error);
+    res.render('plantTalk', {message: `Please upload a file`});
+  }
+  else if (plantid== "Select a plant to post about") {
+    //const error = new Error('Please select a plant');
+    //error.httpStatusCode = 400;
+    //return next(error);
+    res.render('plantTalk', {message: `Please select a plant`});
+  }
+  else if (topic.length == 0) {
+    //const error = new Error('Please enter a topic');
+    //error.httpStatusCode = 400;
+    //return next(error);
+    res.render('plantTalk', {message: `Please enter a topic`});
+  }
+  else if (posttext.length == 0) {
+    //const error = new Error('Please enter a post');
+    //error.httpStatusCode = 400;
+    //return next(error);
+    res.render('plantTalk', {message: `Please enter a post`});
+  }
+  else{
+    let filepath = req.file.path;
+    pool.query("INSERT INTO Post (PlantId, PostDte, Topic, PostText, Image_Url, LoginId) VALUES (?, CURRENT_TIMESTAMP(), ?, ?, ?, ?)",
                   [plantid, topic, posttext, filepath, req.session.login_id], function (err, rows, fields) {
           if (err) throw err;
           res.render('plantTalk', {message: `You post was published successfully.`});
-        });
+    });
+  }
 }); //plantTalk post
 
 app.get("/api/getMyPlants",  function(req, res) {
@@ -188,11 +207,16 @@ app.get("/api/getComments",  function(req, res) {
 app.post("/addCommment",  function(req, res) {
   let postId = req.body.postId;
   let comment = req.body.userComments;
-  pool.query("INSERT INTO Comment (PostId, CommentDte, LoginId, CommentText) VALUES (?, CURRENT_TIMESTAMP(), ?, ?)",
+  if(comment.length == 0){
+    res.render('plantTalk', {message: `Please add a comment`});
+  }
+  else{
+    pool.query("INSERT INTO Comment (PostId, CommentDte, LoginId, CommentText) VALUES (?, CURRENT_TIMESTAMP(), ?, ?)",
                   [postId, req.session.login_id, comment], function (err, rows, fields) {
           if (err) throw err;
           res.render('plantTalk', {message: `You comment was published successfully.`});
         });
+  }
 });
 
 //signIn
