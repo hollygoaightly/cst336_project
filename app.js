@@ -12,7 +12,7 @@ app.use(express.json());       // to support JSON-encoded bodies
 app.use(express.urlencoded({ extended: true })); // to support URL-encoded bodies
 
 const validator = require('./public/js/validator.js');
-const connection = require('./dbPool.js');
+const pool = require('./dbPool.js');
 
 // Set The Storage Engine
 const storage = multer.diskStorage({
@@ -87,12 +87,12 @@ app.get("/api/insertPlant", function(req, res){
     decodeURIComponent(req.query.family),
     decodeURIComponent(req.query.genus),
     decodeURIComponent(req.query.image_url)];
-  connection.query(sql, sqlParams, function (err, rows, fields) {
+  pool.query(sql, sqlParams, function (err, rows, fields) {
     if (err) throw err;
     if (rows.affectedRows == 0)
     {
       sql = "SELECT PlantId FROM `Plant` WHERE TrefleId = ?";
-      connection.query(sql, [req.query.id], function (err, rows2, fields) {
+      pool.query(sql, [req.query.id], function (err, rows2, fields) {
         if (err) throw err;
         res.send(JSON.stringify(rows2));
       });
@@ -108,15 +108,14 @@ app.get("/api/insertPlant", function(req, res){
 app.get("/api/insertLoginPlant", function(req, res){
   if(req.session.logged_in){
     // check if plant is already in collection
-    connection.query("SELECT * FROM LoginPlant WHERE LoginId=? AND PlantId=?", [req.session.login_id, decodeURIComponent(req.query.id)], function (error, result) {
+    pool.query("SELECT * FROM LoginPlant WHERE LoginId=? AND PlantId=?", [req.session.login_id, decodeURIComponent(req.query.id)], function (error, result) {
       if (error) throw error;
       if (result.length > 0) { res.send('This plant is already in your collection!'); }
       else {
         let sql = "INSERT INTO `LoginPlant` (LoginId, PlantId) VALUES (?,?)";
         let sqlParams = [req.session.login_id,req.query.id];
-        connection.query(sql, sqlParams, function (err, rows, fields) {
+        pool.query(sql, sqlParams, function (err, rows, fields) {
           if (err) throw err;
-          console.log(rows);
           res.send('Your collection has been updated!');
         });
       }
@@ -126,11 +125,11 @@ app.get("/api/insertLoginPlant", function(req, res){
 
 //yourPlants : requires login
 app.get("/yourplants", ifNotLoggedin, (req,res,next) => {
-    connection.query("SELECT `FirstName` FROM `Login` WHERE `LoginId`= ?",
-    [req.session.login_id], ( err, rows ) => {
+    pool.query("SELECT `FirstName` FROM `Login` WHERE `LoginId`= ?",
+    [req.session.login_id], (err, rows ) => {
     if (err) throw err;
 	res.render("yourPlants", {"isLoggedIn":req.session.logged_in, name: rows[0].FirstName}); //render
-    }); // connection query : get firstname from db
+    }); // query : get firstname from db
 }); //yourPlants
 
 //plantTalk
@@ -152,7 +151,7 @@ app.post("/plantTalk", upload.single('file1'), function (req, res, next) {
   let plantid = req.body.usersPlant;
   let filepath = req.file.path;
 
-  connection.query("INSERT INTO Post (PlantId, PostDte, Topic, PostText, Image_Url, LoginId) VALUES (?, CURRENT_TIMESTAMP(), ?, ?, ?, ?)",
+  pool.query("INSERT INTO Post (PlantId, PostDte, Topic, PostText, Image_Url, LoginId) VALUES (?, CURRENT_TIMESTAMP(), ?, ?, ?, ?)",
                   [plantid, topic, posttext, filepath, req.session.login_id], function (err, rows, fields) {
           if (err) throw err;
           res.render('plantTalk', {message: `You post was published successfully.`});
@@ -161,11 +160,29 @@ app.post("/plantTalk", upload.single('file1'), function (req, res, next) {
 
 app.get("/api/getMyPlants",  function(req, res) {
   let sql = "SELECT * FROM LoginPlant lp INNER JOIN Plant p on p.PlantId = lp.PlantId Where lp.LoginId = ? ORDER BY SortOrder";
-  connection.query(sql, [req.session.login_id], function (err, rows) {
+  pool.query(sql, [req.session.login_id], function (err, rows) {
      if (err) throw err;
      res.send(rows);
   });  
 });//getMyPlants
+
+// get Plant Talk posts
+app.get("/api/getPosts",  function(req, res) {
+  let sql = "SELECT p.PostId, p.PlantId, p.PostDte, p.Topic, p.PostText, p.Image_Url, l.LoginName, pl.Common_Name, pl.Scientific_Name, pl.Family, pl.Genus, lp.Hardiness, lp.WaterFrequency, lp.Soil, lp.LightExposure, lp.Description FROM Post p INNER JOIN Login l on p.LoginId = l.LoginId INNER JOIN LoginPlant lp on p.LoginId = lp.LoginId AND p.PlantId = lp.PlantId  INNER JOIN Plant pl on p.PlantId = pl.PlantId ORDER BY PostDte DESC";
+  pool.query(sql, function (err, rows) {
+     if (err) console.log(err);
+     res.send(rows);
+  });  
+});
+
+// get Plant Talk comments
+app.get("/api/getComments",  function(req, res) {
+  let sql = "SELECT * FROM Comment c INNER JOIN Login l on c.LoginId = l.LoginId ORDER BY CommentDte DESC";
+  pool.query(sql, function (err, rows) {
+     if (err) console.log(err);
+     res.send(rows);
+  });  
+});
 
 //signIn
 app.get("/signIn", async (req, res) => {
@@ -180,7 +197,7 @@ app.post("/signIn", function(req, res) {
   if (!validator.lengthValid(login, 5, 200) || !validator.lengthValid(password, 8, 20)) {
     res.render('signIn', {error: 'login or pass invalid'});
   } else {
-    connection.query("SELECT * FROM `Login` WHERE `LoginName` = ?", login, (error, result) => {
+    pool.query("SELECT * FROM `Login` WHERE `LoginName` = ?", login, (error, result) => {
       if (error) throw error;
       if (result.length === 0) {
         res.render('signIn', {error: 'No such user'});
@@ -232,7 +249,7 @@ app.post('/register', function(req, res) {
     res.render('register', {error: 'Passwords do not match'});
   } else {
         // Check if email exists
-        connection.query("SELECT * FROM Login WHERE Email=?", [email], function (error, result) {
+        pool.query("SELECT * FROM Login WHERE Email=?", [email], function (error, result) {
             if (error) throw error;
             if (result.length > 0) { res.render('register', {error: 'This email already exists'}); }
             else {
@@ -240,9 +257,9 @@ app.post('/register', function(req, res) {
                 if (error) throw error;
                 bcrypt.hash(password, salt, function(error, hash) {
                   if (error) throw error;
-                  connection.query("INSERT INTO Login (LoginName, HashedPwd, Email, FirstName, LastName, Gender, ZipCode) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                  pool.query("INSERT INTO Login (LoginName, HashedPwd, Email, FirstName, LastName, Gender, ZipCode) VALUES (?, ?, ?, ?, ?, ?, ?)",
                   [login, hash, email, fname, lname, gender, zip], function(error, result) {
-                  res.render('register', {message: `You have been registered, try logging in`});
+                    res.render('register', {message: `You have been registered, try logging in`});
                   });
                 });
               });
