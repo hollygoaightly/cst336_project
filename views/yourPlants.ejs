@@ -4,6 +4,11 @@
 <!-- index.ejs - main content -->
         <main>
             <p><%= yourPlantsArray[0].FirstName %>'s Plants</p>
+            <br />
+            <form action="/findPlants">
+                <button>Add Plant</button>
+            </form>
+            <br />
 <!-- yourPlantsContainer start -->
             <div class="yourPlantsContainer">
 
@@ -11,22 +16,26 @@
 <!-- plantObj start -->
                 <div class="plantObj rounded shadow">
                         <div id="plantProperties">
-                            <img src="<%= yourPlantObj.Image_Url %>" height="100" alt="plant common name <%= yourPlantObj.Common_Name %>"  /><br />
+                            <div class="card bg-light"> 
+                            <img class="card-img-top" src="<%= yourPlantObj.Image_Url %>" height="175" alt="plant common name <%= yourPlantObj.Common_Name %>"  />
+                            <div class="card-header">Scientific Name: <%= yourPlantObj.Scientific_Name %></div>
+                            <div class="card-text">
                             Common Name: <%= yourPlantObj.Common_Name %><br />
-                            Scientific Name: <%= yourPlantObj.Scientific_Name %><br />
                             Family: <%= yourPlantObj.Family %><br />
                             Genus: <%= yourPlantObj.Genus %><br />
-                            <form method="POST">
-                            USDA Hardiness Zone:<input type="text" name="hardiness" value="<%= yourPlantObj.Hardiness %>" /><br />
-                            Watering Frequency: <input type="text" name="waterFreq" value="<%= yourPlantObj.WaterFrequency %>" /><br />
-                            Soil Used: <input type="text" name="soil" value="<%= yourPlantObj.Soil %>" /><br />
-                            Temperature: <input type="text" name="temperature" value="<%= yourPlantObj.Temperature %>" /><br />
-                            Light Exposure: <input type="text" name="lightExposure" value="<%= yourPlantObj.LightExposure %>" /><br />
-                            Fertilization: <input type="text" name="fertilization" value="<%= yourPlantObj.Fertilization %>" /><br />
+                            </div>
+                            </div>
                         </div>
                         <div id="plantProperties">
+                            <form method="POST" action="/">
+                                USDA Hardiness Zone:<br /><input type="text" name="hardiness" size="31" value="<%= yourPlantObj.Hardiness %>" /><br />
+                                Watering Frequency:<br /><input type="text" name="waterFreq" size="31" value="<%= yourPlantObj.WaterFrequency %>" /><br />
+                                Soil Used:<br /><input type="text" name="soil" size="31" value="<%= yourPlantObj.Soil %>" /><br />
+                                Temperature:<br /><input type="text" name="temperature" size="31" value="<%= yourPlantObj.Temperature %>" /><br />
+                                Light Exposure:<br /><input type="text" name="lightExposure" size="31" value="<%= yourPlantObj.LightExposure %>" /><br />
+                                Fertilization:<br /><input type="text" name="fertilization" size="31" value="<%= yourPlantObj.Fertilization %>" /><br />
                                 Notes:<br />
-                                <textarea name="description" rows="4" cols="25"><%= yourPlantObj.Description %></textarea>
+                                <textarea name="description" rows="4" cols="30"><%= yourPlantObj.Description %></textarea>
                                 <button>Save</button> <button>Share</button>
                             </form>
                         </div>
@@ -35,9 +44,7 @@
 <!-- plantObj end -->
             </div>
 <!-- yourPlantsContainer end -->
-            <form action="/findPlants">
-                <button>Add Plant</button>
-            </form>
+
         </main>
         
 <!-- footer.ejs partial - footer -->

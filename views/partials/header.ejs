@@ -17,7 +17,11 @@
             <a class='nav-link' href='/'>Home</a>
             <a class='nav-link' href='/yourPlants'>Your Plants</a>
             <a class='nav-link' href='/plantTalk'>Plant Talk</a>
+            <% if( typeof isLoggedIn == "undefined") { %>
             <a class='nav-link mr-auto' href='/findPlants'>Find Plants</a>
+            <% } else { %>
+            <a class='nav-link mr-auto' href='/findPlants'>Add Plants</a>
+            <% } %>
             <% if( typeof isLoggedIn == "undefined") { %>
             <a class='nav-link' href='/signIn'>Sign In</a>
             <a class='nav-link' href='/register'>Register</a>

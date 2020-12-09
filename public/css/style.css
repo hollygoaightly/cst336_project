@@ -36,7 +36,7 @@ nav a:hover {
 main {
     /* fixes the issue with small height cutting off text at footer */
     padding-bottom: 200px;
-    margin: 10% 20% auto;
+    margin: 5% 10% auto;
 }
 /* index.ejs - intro paragraph, background */
 main p {
@@ -82,6 +82,10 @@ footer {
 #plantProperties {
     /* remove border when submitting. Just for debugging. */
     /*border: 1px solid black;*/
+    /* center card */
+    align-self:center;
+    /* center text */
+    align-content: center;
     margin: 5px;
     width: 250px;
     font-size: 14px;
@@ -113,4 +117,8 @@ plantTalkComments. */
     text-align:left;
     border-bottom: 1px solid black;
     font-size: 12px;   
+}
+/* results.ejs - card column count for the results */
+.card-columns {
+    column-count: 5;    
 }
