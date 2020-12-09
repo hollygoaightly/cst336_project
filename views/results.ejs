@@ -1,21 +1,31 @@
 <!-- header.ejs partial - header, nav bar -->
 <%- include('partials/header.ejs') %>
 <!-- index.ejs - main content -->
-          <% if (typeof error !== "undefined" && error) { %>
-          <div class="alert alert-primary fade show" role="alert">
-            <%= error %> 
-          </div>
-          <% } %>
-        <br><br>
-        <% imageUrlArray.forEach(function(imageUrl, i){ %>
-            <img src='<%= imageUrl %>' width='200' alt='<%= genusArray[i] %>'/><br>
-            Scientific name: <i><%= scienceNameArray[i] %></i> Family: <i><%= familyNameArray[i] %><br></i>
-            Common name: <b><%= commonNameArray[i] %></b> Genus: <%= genusArray[i] %><br>
-            <button <%= isVisible %> id='<%= idArray[i] %>;<%= imageUrl %>;<%= genusArray[i] %>;<%= scienceNameArray[i] %>;<%= familyNameArray[i] %>;<%= commonNameArray[i] %>;' class='option'>Add to my plants</button>
+        <main>
+            <p>Results</p>
+            <% if (typeof error !== "undefined" && error) { %>
+            <div class="alert alert-primary fade show" role="alert">
+                <%= error %> 
+            </div>
+            <% } else if (imageUrlArray.length == 0) { %>
+                <div class="alert alert-primary fade show" role="alert">
+                No results found.<br />
+                </div>
+            <% } %>
+            <button onclick="window.history.back()">Back</button>
             <br><br>
-        <% });%>
-        <br><br>
-        <br><br>
+            <div class="card-columns">
+                <% imageUrlArray.forEach(function(imageUrl, i){ %>
+                    <div class="card bg-light shadow">            
+                        <img class="card-img-top" src='<%= imageUrl %>' width='200' alt='<%= genusArray[i] %>'/>
+                        <div class="card-header">Scientific name: <i><%= scienceNameArray[i] %></i></div><div class="card-text">Family: <i><%= familyNameArray[i] %><br></i>
+                        Common name: <b><%= commonNameArray[i] %></b><br/>Genus: <%= genusArray[i] %></div><br />
+                        <button <%= isVisible %> id='<%= idArray[i] %>;<%= imageUrl %>;<%= genusArray[i] %>;<%= scienceNameArray[i] %>;<%= familyNameArray[i] %>;<%= commonNameArray[i] %>;' class='option'>Add to my plants</button>
+                        <br /><br />
+                    </div>
+                <% });%>
+            </div>
+        </main>
         <script src="/js/function.js"></script>
 <!-- footer.ejs partial - footer -->
 <%- include('partials/footer.ejs') %>

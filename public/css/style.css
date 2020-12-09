@@ -32,7 +32,7 @@ nav a:hover {
 .currentPage {
     color: #A35593;
 }
-/* index.ejs, register.ejs - positioning of main semantic tag */
+/* index.ejs, register.ejs, yourPlants.ejs - positioning of main semantic tag */
 main {
     /* fixes the issue with small height cutting off text at footer */
     padding-bottom: 200px;
@@ -56,11 +56,6 @@ footer {
 #regWindow, #signInWindow {
     font-size: 14px;
     background-color: rgba(255,255,255,0.75);
-}
-/* yourPlants.ejs - positioning of main semantic tag */
-#yourPlantsPage {
-    padding-bottom: 200px;
-    margin: 5% 5% auto;
 }
 /* yourPlants.ejs - primary container for all plantObjs */
 /* display properties and justification of flex items */

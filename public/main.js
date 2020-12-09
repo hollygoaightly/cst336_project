@@ -4,7 +4,7 @@ window.onload = function(){
     //mark active men item
     markActiveMenuItem(location.pathname);
 
-//loads the menu and marks current page
+    //loads the menu and marks current page
     function markActiveMenuItem(menuItem) {
         //menu items
         for(let i = 0 ; i < $(".nav-link").length ; i++) {
@@ -14,4 +14,5 @@ window.onload = function(){
             } //if
         } //for
     }//loadMenu
+    
 };

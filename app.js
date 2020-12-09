@@ -299,7 +299,7 @@ app.get("/search", async (req, res) => {
             plantData.set(data[i].id, plantObj);
         }
         let isVisible = (req.session.logged_in)? "": "hidden";
-        res.render("results", {"idArray":idArray, "imageUrlArray":imageUrlArray, "commonNameArray":commonNameArray, "scienceNameArray":scienceNameArray,"familyNameArray": familyNameArray, "genusArray":genusArray, "isVisible": isVisible});
+        res.render("results", {"isLoggedIn":req.session.logged_in,"idArray":idArray, "imageUrlArray":imageUrlArray, "commonNameArray":commonNameArray, "scienceNameArray":scienceNameArray,"familyNameArray": familyNameArray, "genusArray":genusArray, "isVisible": isVisible});
     }
 });
 

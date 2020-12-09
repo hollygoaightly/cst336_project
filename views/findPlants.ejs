@@ -1,12 +1,15 @@
 <!-- header.ejs partial - header, nav bar -->
 <%- include('partials/header.ejs') %>
 <!-- index.ejs - main content -->
-            <br><br>
-            <form action="/search">
-                <input type="text" placeholder="Type keyword" name="keyword">
-                <br/><br/>
-                <button>Search</button>
-            </form>
-            <br><br>
+            <main>
+                <p>Find Plants</p>
+                <br><br>
+                <form action="/search">
+                    <input type="text" placeholder="Type keyword" name="keyword">
+                    <br/><br/>
+                    <button>Search</button>
+                </form>
+                <br><br>
+            </main>
 <!-- footer.ejs partial - footer -->
 <%- include('partials/footer.ejs') %>
