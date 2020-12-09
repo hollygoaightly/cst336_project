@@ -98,16 +98,13 @@
                             $(".plantTalkContainer").append(`<p>Comments</p>`);
                             $(".plantTalkContainer").append(`<span id="plantTalkUserComments">`);
                             for (let j=0; j< map[key].length; j++){
-                                let comment = map[key][i];
+                                let comment = map[key][j];
                                     $(".plantTalkContainer").append(`Date: ${comment.CommentDte}<br />`); 
                                      $(".plantTalkContainer").append(`User: ${comment.LoginName}<br />`);
                                      $(".plantTalkContainer").append(`${comment.CommentText}<br /><br />`);
                             } 
                              $(".plantTalkContainer").append(`</span><br />`);
-                             $(".plantTalkContainer").append(`<form action="/addCommment">`);
-                                 $(".plantTalkContainer").append(`<input type="text" name="userComments" size="125" /><br />`);
-                                 $(".plantTalkContainer").append(`<button>Post a Comment</button><br /><br />`);
-                             $(".plantTalkContainer").append(`</form>`);
+                             $(".plantTalkContainer").append(`<form action="/addCommment" method="POST"> <input type="hidden" name="postId" value="${postData[i].PostId}"><input type="text" class="form-control" name="userComments" size="125" /><br /><button>Post a Comment</button><br /><br /></form>`);
                          $(".plantTalkContainer").append(`</div>`);
                      $(".plantTalkContainer").append(`</div><br /><br />`);
                 }

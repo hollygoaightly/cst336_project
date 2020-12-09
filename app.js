@@ -177,11 +177,22 @@ app.get("/api/getPosts",  function(req, res) {
 
 // get Plant Talk comments
 app.get("/api/getComments",  function(req, res) {
-  let sql = "SELECT * FROM Comment c INNER JOIN Login l on c.LoginId = l.LoginId ORDER BY CommentDte DESC";
+  let sql = "SELECT PostId, CommentDte, LoginName, CommentText FROM Comment c INNER JOIN Login l on c.LoginId = l.LoginId ORDER BY CommentDte DESC";
   pool.query(sql, function (err, rows) {
      if (err) console.log(err);
      res.send(rows);
   });  
+});
+
+// post Plant Talk comments
+app.post("/addCommment",  function(req, res) {
+  let postId = req.body.postId;
+  let comment = req.body.userComments;
+  pool.query("INSERT INTO Comment (PostId, CommentDte, LoginId, CommentText) VALUES (?, CURRENT_TIMESTAMP(), ?, ?)",
+                  [postId, req.session.login_id, comment], function (err, rows, fields) {
+          if (err) throw err;
+          res.render('plantTalk', {message: `You comment was published successfully.`});
+        });
 });
 
 //signIn
