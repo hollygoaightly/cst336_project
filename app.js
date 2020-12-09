@@ -125,12 +125,58 @@ app.get("/api/insertLoginPlant", function(req, res){
 
 //yourPlants : requires login
 app.get("/yourplants", ifNotLoggedin, (req,res,next) => {
+    
+    /*
+    var firstName;
+    
+    await pool.query("SELECT `FirstName` FROM `Login` WHERE `LoginId`= ?",
+    [req.session.login_id], (err, rows ) => {
+      if (err) throw err;
+      firstName = rows[0].FirstName;
+      console.log(firstName);
+    });
+    
+    console.log(firstName);
+    */
+    
+    //console.log(location.pathname); 
+    /*
+    let url = `./api/getMyPlants`;
+    let response = await fetch(url);
+    let data = await response.json();
+    
+    console.log(url);
+    */
+    /*
+        let sql = "SELECT * FROM `Plant` INNER JOIN `LoginPlant` ON `Plant`.`PlantId` = `LoginPlant`.`PlantId` WHERE `LoginId` = ?";
+        pool.query(sql,[req.session.login_id], (err, rows2) => {
+        if(err) throw err;
+        console.log(req.session.login_id);
+    
+    */
+    
+  let sql = `SELECT StartDte, EndDte, Hidden, FriendlyName, Description, Hardiness, WaterFrequency, Soil, Temperature, LightExposure, Fertilization, SortOrder, FirstName, TrefleId, Common_Name, Scientific_Name, Family, Genus, Image_Url
+  FROM Plant
+	  INNER JOIN LoginPlant
+      ON Plant.PlantId = LoginPlant.PlantId
+    INNER JOIN Login
+	    ON LoginPlant.LoginId = Login.LoginId
+  WHERE Login.LoginId = ?`;
+  
+    pool.query(sql, [req.session.login_id], (err, rows ) => {
+      if (err) throw err;
+      res.render("yourPlants", {"isLoggedIn":req.session.logged_in, yourPlantsArray: rows}); //render
+    });
+});
+
+/*//yourPlants//yourPlants : requires login
+app.get("/yourplants", ifNotLoggedin, (req,res,next) => {
     pool.query("SELECT `FirstName` FROM `Login` WHERE `LoginId`= ?",
     [req.session.login_id], (err, rows ) => {
     if (err) throw err;
 	res.render("yourPlants", {"isLoggedIn":req.session.logged_in, name: rows[0].FirstName}); //render
     }); // query : get firstname from db
-}); //yourPlants
+}); //yourPlants*/
 
 //plantTalk
 app.get("/plantTalk", ifNotLoggedin, async (req, res) => {
