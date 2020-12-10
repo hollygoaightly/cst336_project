@@ -357,7 +357,7 @@ app.get("/signout", (req,res) => {
 app.get("/search", async (req, res) => {
     plantData.clear();
     let keyword = "";
-    if (req.query.keyword){
+    if (req.query.keyword. length > 0){
         keyword = req.query.keyword;
         let apiUrl = `https://trefle.io/api/v1/plants/search?token=6t4ZVV4DE7bKaqSg1CDFPHq3r5giNXINF3qlk43Povk&q=${keyword}`;
         let response = await fetch(apiUrl);
@@ -392,6 +392,9 @@ app.get("/search", async (req, res) => {
         }
         let isVisible = (req.session.logged_in)? "": "hidden";
         res.render("results", {"isLoggedIn":req.session.logged_in,"idArray":idArray, "imageUrlArray":imageUrlArray, "commonNameArray":commonNameArray, "scienceNameArray":scienceNameArray,"familyNameArray": familyNameArray, "genusArray":genusArray, "isVisible": isVisible});
+    }
+    else{
+      res.render("findPlants", {"message":"Input required"});
     }
 });
 

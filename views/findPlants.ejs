@@ -1,6 +1,11 @@
 <!-- header.ejs partial - header, nav bar -->
 <%- include('partials/header.ejs') %>
 <!-- index.ejs - main content -->
+            <% if (typeof message != "undefined" && message) {%>
+                <div class="alert alert-info fade show" role="alert">
+                  <strong><%= message %></strong>
+                </div>
+            <% } %>
             <main>
                 <p>Find Plants</p>
                 <br><br>
