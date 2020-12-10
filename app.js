@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const path = require('path');
 const app = express();
+
 app.engine('html', require('ejs').renderFile);
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -53,9 +54,6 @@ app.use(session({
   saveUninitialized: true,
   cookie: { maxAge: 20 * 60 * 1000 } // cookie life in milliseconds = 20 minutes here
 }));
-
-let plantData = new Map();
-
 
 // DECLARING CUSTOM MIDDLEWARE
 const ifNotLoggedin = (req, res, next) => {
@@ -124,93 +122,40 @@ app.get("/api/insertLoginPlant", function(req, res){
 });
 
 //yourPlants : requires login
-app.get("/yourPlants", ifNotLoggedin, (req,res,next) => {
-
-  let sql = `SELECT Description, Hardiness, WaterFrequency, Soil, 
-  Temperature, LightExposure, Fertilization, FirstName, Common_Name,
-  Scientific_Name, Family, Genus, Image_Url, LoginPlant.PlantId, LoginPlant.LoginId
-  FROM Plant
-	  INNER JOIN LoginPlant
-      ON Plant.PlantId = LoginPlant.PlantId
-    INNER JOIN Login
-	    ON LoginPlant.LoginId = Login.LoginId
-  WHERE Login.LoginId = ?`;
-  
-    pool.query(sql, [req.session.login_id], (err, rows ) => {
-      if (err) throw err;
-      res.render("yourPlants", {"isLoggedIn":req.session.logged_in, yourPlantsArray: rows}); //render
-    }); //query
+app.get("/yourplants", ifNotLoggedin, (req,res,next) => {
+    pool.query("SELECT `FirstName` FROM `Login` WHERE `LoginId`= ?",
+    [req.session.login_id], (err, rows ) => {
+    if (err) throw err;
+	res.render("yourPlants", {"isLoggedIn":req.session.logged_in, name: rows[0].FirstName}); //render
+    }); // query : get firstname from db
 }); //yourPlants
-
-//updatePlantProperties
-app.post("/updatePlantProperties", (req,res) => {
-
-  let sql = `UPDATE LoginPlant
-  SET
-	  Description = ?,
-    Hardiness = ?,
-    WaterFrequency = ?,
-    Soil = ?,
-    Temperature = ?,
-    LightExposure = ?,
-    Fertilization = ?
-  WHERE
-	  LoginId = ? AND PlantId = ?`;
-	
-	let sqlParams = [req.body.description ,req.body.hardiness, req.body.waterFreq
-	,req.body.soil, req.body.temperature, req.body.lightExposure, req.body.fertilization
-	,req.body.LoginId, req.body.PlantId];
-  
-  pool.query(sql, sqlParams, (err, rows) => {
-    if(err) throw err;
-    console.log(rows.affectedRows.toString());
-  }); //query
-  res.redirect("/yourPlants");
-}); //updatePlantProperties
 
 //plantTalk
 app.get("/plantTalk", ifNotLoggedin, async (req, res) => {
-	res.render("plantTalk",{"isLoggedIn":req.session.logged_in}); //render
+	res.render("plantTalk",{
+	  "isLoggedIn":req.session.logged_in
+	}); //render
 }); //plantTalk
 
 //plantTalk post
 app.post("/plantTalk", upload.single('file1'), function (req, res, next) {
   const file = req.file;
-  let topic = req.body.topic;
+  if (!file) {
+    const error = new Error('Please upload a file');
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+      
+	let topic = req.body.topic;
   let posttext = req.body.posttext;
   let plantid = req.body.usersPlant;
-  if (!file) {
-    //const error = new Error('Please upload a file');
-    //error.httpStatusCode = 400;
-    //return next(error);
-    res.render('plantTalk', {message: `Please upload a file`});
-  }
-  else if (plantid== "Select a plant to post about") {
-    //const error = new Error('Please select a plant');
-    //error.httpStatusCode = 400;
-    //return next(error);
-    res.render('plantTalk', {message: `Please select a plant`});
-  }
-  else if (topic.length == 0) {
-    //const error = new Error('Please enter a topic');
-    //error.httpStatusCode = 400;
-    //return next(error);
-    res.render('plantTalk', {message: `Please enter a topic`});
-  }
-  else if (posttext.length == 0) {
-    //const error = new Error('Please enter a post');
-    //error.httpStatusCode = 400;
-    //return next(error);
-    res.render('plantTalk', {message: `Please enter a post`});
-  }
-  else{
-    let filepath = req.file.path;
-    pool.query("INSERT INTO Post (PlantId, PostDte, Topic, PostText, Image_Url, LoginId) VALUES (?, CURRENT_TIMESTAMP(), ?, ?, ?, ?)",
+  let filepath = req.file.path;
+
+  pool.query("INSERT INTO Post (PlantId, PostDte, Topic, PostText, Image_Url, LoginId) VALUES (?, CURRENT_TIMESTAMP(), ?, ?, ?, ?)",
                   [plantid, topic, posttext, filepath, req.session.login_id], function (err, rows, fields) {
           if (err) throw err;
           res.render('plantTalk', {message: `You post was published successfully.`});
-    });
-  }
+        });
 }); //plantTalk post
 
 app.get("/api/getMyPlants",  function(req, res) {
@@ -232,27 +177,11 @@ app.get("/api/getPosts",  function(req, res) {
 
 // get Plant Talk comments
 app.get("/api/getComments",  function(req, res) {
-  let sql = "SELECT PostId, CommentDte, LoginName, CommentText FROM Comment c INNER JOIN Login l on c.LoginId = l.LoginId ORDER BY CommentDte DESC";
+  let sql = "SELECT * FROM Comment c INNER JOIN Login l on c.LoginId = l.LoginId ORDER BY CommentDte DESC";
   pool.query(sql, function (err, rows) {
      if (err) console.log(err);
      res.send(rows);
   });  
-});
-
-// post Plant Talk comments
-app.post("/addCommment",  function(req, res) {
-  let postId = req.body.postId;
-  let comment = req.body.userComments;
-  if(comment.length == 0){
-    res.render('plantTalk', {message: `Please add a comment`});
-  }
-  else{
-    pool.query("INSERT INTO Comment (PostId, CommentDte, LoginId, CommentText) VALUES (?, CURRENT_TIMESTAMP(), ?, ?)",
-                  [postId, req.session.login_id, comment], function (err, rows, fields) {
-          if (err) throw err;
-          res.render('plantTalk', {message: `You comment was published successfully.`});
-        });
-  }
 });
 
 //signIn
@@ -351,9 +280,8 @@ app.get("/signout", (req,res) => {
 
 //search for plants
 app.get("/search", async (req, res) => {
-    plantData.clear();
     let keyword = "";
-    if (req.query.keyword. length > 0){
+    if (req.query.keyword){
         keyword = req.query.keyword;
         let apiUrl = `https://trefle.io/api/v1/plants/search?token=6t4ZVV4DE7bKaqSg1CDFPHq3r5giNXINF3qlk43Povk&q=${keyword}`;
         let response = await fetch(apiUrl);
@@ -373,24 +301,9 @@ app.get("/search", async (req, res) => {
             scienceNameArray.push(data[i].scientific_name);
             familyNameArray.push(data[i].family);
             genusArray.push(data[i].genus);
-            
-            // for database
-            var plantObj = {
-            	id: data[i].id,
-            	common_name: data[i].common_name,
-            	family: data[i].family,
-            	genus: data[i].genus,
-            	image_url: data[i].image_url,
-            	scientific_name: data[i].scientific_name
-            };
-            
-            plantData.set(data[i].id, plantObj);
         }
         let isVisible = (req.session.logged_in)? "": "hidden";
-        res.render("results", {"isLoggedIn":req.session.logged_in,"idArray":idArray, "imageUrlArray":imageUrlArray, "commonNameArray":commonNameArray, "scienceNameArray":scienceNameArray,"familyNameArray": familyNameArray, "genusArray":genusArray, "isVisible": isVisible});
-    }
-    else{
-      res.render("findPlants", {"message":"Input required"});
+        res.render("results", {"idArray":idArray, "imageUrlArray":imageUrlArray, "commonNameArray":commonNameArray, "scienceNameArray":scienceNameArray,"familyNameArray": familyNameArray, "genusArray":genusArray, "isVisible": isVisible});
     }
 });
 
