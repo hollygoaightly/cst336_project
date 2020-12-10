@@ -8,9 +8,11 @@
                 <%= error %> 
             </div>
             <% } else if (imageUrlArray.length == 0) { %>
-                <div class="alert alert-primary fade show" role="alert">
+                <div class="alert alert-primary" role="alert">
                 No results found.<br />
                 </div>
+            <% } else if (isVisible == "hidden") { %>
+                <div class="alert alert-warning">Please sign in if you would like to add plants to your collection.</div>
             <% } %>
             <button onclick="window.history.back()">Back</button>
             <br><br>

@@ -14,5 +14,11 @@ window.onload = function(){
             } //if
         } //for
     }//loadMenu
+    /*
+    $("#saveButton").on("click", () => {
+       console.log($(event.target).prev().val()); 
+       console.log($(event.target).prev().prev().val());
+       console.log($(event.target).prev().prev().prev().val());
+    });*/
     
 };
