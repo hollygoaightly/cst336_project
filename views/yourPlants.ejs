@@ -17,17 +17,19 @@
                 <div class="plantObj rounded shadow">
                         <div id="plantProperties">
                             <div class="card bg-light"> 
-                            <img class="card-img-top" src="<%= yourPlantObj.Image_Url %>" height="175" alt="plant common name <%= yourPlantObj.Common_Name %>"  />
-                            <div class="card-header">Scientific Name: <%= yourPlantObj.Scientific_Name %></div>
-                            <div class="card-text">
-                            Common Name: <%= yourPlantObj.Common_Name %><br />
-                            Family: <%= yourPlantObj.Family %><br />
-                            Genus: <%= yourPlantObj.Genus %><br />
-                            </div>
+                                <img class="card-img-top" src="<%= yourPlantObj.Image_Url %>" alt="plant common name <%= yourPlantObj.Common_Name %>"  />
+                                <div class="card-header">
+                                    Scientific Name: <%= yourPlantObj.Scientific_Name %>
+                                </div>
+                                <div class="card-text">
+                                    Common Name: <%= yourPlantObj.Common_Name %><br />
+                                    Family: <%= yourPlantObj.Family %><br />
+                                    Genus: <%= yourPlantObj.Genus %><br />
+                                </div>
                             </div>
                         </div>
                         <div id="plantProperties">
-                            <form method="POST" action="/">
+                            <form method="POST" action="/updatePlantProperties">
                                 USDA Hardiness Zone:<br /><input type="text" name="hardiness" size="31" value="<%= yourPlantObj.Hardiness %>" /><br />
                                 Watering Frequency:<br /><input type="text" name="waterFreq" size="31" value="<%= yourPlantObj.WaterFrequency %>" /><br />
                                 Soil Used:<br /><input type="text" name="soil" size="31" value="<%= yourPlantObj.Soil %>" /><br />
@@ -36,6 +38,8 @@
                                 Fertilization:<br /><input type="text" name="fertilization" size="31" value="<%= yourPlantObj.Fertilization %>" /><br />
                                 Notes:<br />
                                 <textarea name="description" rows="4" cols="30"><%= yourPlantObj.Description %></textarea>
+                                <input type="hidden" name="LoginId" value="<%= yourPlantObj.LoginId %>" />
+                                <input type="hidden" name="PlantId" value="<%= yourPlantObj.PlantId %>" />
                                 <button>Save</button> <button>Share</button>
                             </form>
                         </div>

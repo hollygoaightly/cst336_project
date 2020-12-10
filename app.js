@@ -126,9 +126,9 @@ app.get("/api/insertLoginPlant", function(req, res){
 //yourPlants : requires login
 app.get("/yourplants", ifNotLoggedin, (req,res,next) => {
 
-  let sql = `SELECT StartDte, EndDte, Hidden, FriendlyName, Description,
-  Hardiness, WaterFrequency, Soil, Temperature, LightExposure, Fertilization,
-  SortOrder, FirstName, TrefleId, Common_Name, Scientific_Name, Family, Genus, Image_Url
+  let sql = `SELECT Description, Hardiness, WaterFrequency, Soil, 
+  Temperature, LightExposure, Fertilization, FirstName, Common_Name,
+  Scientific_Name, Family, Genus, Image_Url, LoginPlant.PlantId, LoginPlant.LoginId
   FROM Plant
 	  INNER JOIN LoginPlant
       ON Plant.PlantId = LoginPlant.PlantId
@@ -141,6 +141,36 @@ app.get("/yourplants", ifNotLoggedin, (req,res,next) => {
       res.render("yourPlants", {"isLoggedIn":req.session.logged_in, yourPlantsArray: rows}); //render
     }); //query
 }); //yourPlants
+
+//updatePlantProperties
+app.post("/updatePlantProperties", ifNotLoggedin, async (req,res) => {
+
+  
+  //console.log(req.body.LoginId);
+  //console.log(req.body.PlandId);
+  //res.send("updated!");
+
+  let sql = `UPDATE LoginPlant
+  SET
+	Description = ?,
+    Hardiness = ?,
+    WaterFrequency = ?,
+    Soil = ?,
+    Temperature = ?,
+    LightExposure = ?,
+    Fertilization = ?
+  WHERE
+	LoginId = ? AND PlantId = ?`;
+	
+	let sqlParams = [req.body.description ,req.body.hardiness, req.body.waterFreq, req.body.soil, req.body.temperature, req.body.lightExposure,             req.body.fertilization, req.body.LoginId, req.body.PlantId];
+  
+  pool.query(sql, sqlParams, (err, rows) => {
+    if(err) throw err;
+    console.log(rows.affectedRows.toString());
+    res.send("updated!");
+  }); //query
+  
+}); //updatePlantProperties
 
 //plantTalk
 app.get("/plantTalk", ifNotLoggedin, async (req, res) => {
