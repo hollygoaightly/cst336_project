@@ -3,33 +3,39 @@
 
 <!-- index.ejs - main content -->
         <main>
-            <p>Posts</p>
+            <header>
+                <p>Posts</p>
+            </header>
 
 <!--form for submitting yourPlant to plantTalk -->
-                <% if (typeof message !== "undefined" && message) {%>
-                <div class="alert alert-info fade show" role="alert">
-                  <strong><%= message %></strong>
-                </div>
-                <% } %>
-                <form action="/plantTalk" enctype="multipart/form-data" method="POST">
-                    <div class="form-group">
-                    <select class="form-control" name="usersPlant" id="usersPlant">
-                    </select>
-                    <input type="text" class="form-control" name="topic" placeholder="Topic" size="100" />
-                    <textarea type="text" class="form-control" name="posttext" placeholder="Your post text" rows="4"></textarea>
-                    <div class="form-group">
-                        <label for="file1">Attach an image</label>
-                        <input type="file" class="form-control-file" name="file1">
-                      </div>
-                    <input type="submit" class="btn btn-outline-success" value="Post Your Plant"><br /><br />
+                <section>
+                    <% if (typeof message !== "undefined" && message) {%>
+                    <div class="alert alert-info fade show" role="alert">
+                      <strong><%= message %></strong>
                     </div>
-                </form>
+                    <% } %>
+                    <form action="/plantTalk" enctype="multipart/form-data" method="POST">
+                        <div class="form-group">
+                        <select class="form-control" name="usersPlant" id="usersPlant">
+                        </select>
+                        <input type="text" class="form-control" name="topic" placeholder="Topic" size="100" />
+                        <textarea type="text" class="form-control" name="posttext" placeholder="Your post text" rows="4"></textarea>
+                        <div class="form-group">
+                            <label for="file1">Attach an image</label>
+                            <input type="file" class="form-control-file" name="file1">
+                          </div>
+                        <input type="submit" class="btn btn-outline-success" value="Post Your Plant"><br /><br />
+                        </div>
+                    </form>
+                </section>
 <!--form for submitting yourPlant to plantTalk -->
 
 <!-- plantTalkContainer start -->
-            <div class="plantTalkContainer">
-
-            </div>
+            <section>
+                <div class="plantTalkContainer">
+    
+                </div>
+            </section>
 <!-- plantTalkContainer end -->  
 
         </main>
@@ -80,11 +86,11 @@
             let dtPost = new Date(postData[i].PostDte).toLocaleString();
             $(".plantTalkContainer").append(`<div id="plantTalkObj">`);
             $(".plantTalkContainer").append(`<div id="plantTalkUserPlant">`);
-            $(".plantTalkContainer").append(`<h3>${getOutput(postData[i].Topic)}</h3>`);
+            $(".plantTalkContainer").append(`<header><h3>${getOutput(postData[i].Topic)}</h3></header>`);
             $(".plantTalkContainer").append(`<h5>Post by: ${getOutput(postData[i].LoginName)}</h5>`);
-            $(".plantTalkContainer").append(`<h5>Post Date: ${getOutput(dtPost)}</h5>`);
-            $(".plantTalkContainer").append(`<img src="${getOutput(postData[i].Image_Url)}" class="plantTalkImages" width="30%" height="auto" alt="No Image" /><br />`);
-            $(".plantTalkContainer").append(`Common Name: ${getOutput(postData[i].Common_Name)}<br />`);
+            $(".plantTalkContainer").append(`<date><h5>Post Date: ${getOutput(dtPost)}</h5></date>`);
+            $(".plantTalkContainer").append(`<figure><img src="${getOutput(postData[i].Image_Url)}" class="plantTalkImages" width="30%" height="auto" alt="No Image" /></figure>`);
+            $(".plantTalkContainer").append(`<figcaption>Common Name: ${getOutput(postData[i].Common_Name)}</figcaption>`);
             $(".plantTalkContainer").append(`Scientific Name: ${getOutput(postData[i].Scientific_Name)}<br />`);
             $(".plantTalkContainer").append(`Family: ${getOutput(postData[i].Family)}<br />`);
             $(".plantTalkContainer").append(`Genus: ${getOutput(postData[i].Genus)}<br />`);

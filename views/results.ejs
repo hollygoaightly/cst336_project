@@ -2,31 +2,40 @@
 <%- include('partials/header.ejs') %>
 <!-- index.ejs - main content -->
         <main>
-            <p>Results</p>
-            <% if (typeof error !== "undefined" && error) { %>
-            <div class="alert alert-primary fade show" role="alert">
-                <%= error %> 
-            </div>
-            <% } else if (imageUrlArray.length == 0) { %>
-                <div class="alert alert-primary" role="alert">
-                No results found.<br />
+            <header>
+                <p>Results</p>
+            </header>
+            
+            <section>
+                <% if (typeof error !== "undefined" && error) { %>
+                <div class="alert alert-primary fade show" role="alert">
+                    <%= error %> 
                 </div>
-            <% } else if (isVisible == "hidden") { %>
-                <div class="alert alert-warning">Please sign in if you would like to add plants to your collection.</div>
-            <% } %>
-            <button onclick="window.history.back()">Back</button>
-            <br><br>
-            <div class="card-columns">
-                <% imageUrlArray.forEach(function(imageUrl, i){ %>
-                    <div class="card bg-light shadow">            
-                        <img class="card-img-top" src='<%= imageUrl %>' width='200' alt='<%= genusArray[i] %>'/>
-                        <div class="card-header">Scientific name: <i><%= scienceNameArray[i] %></i></div><div class="card-text">Family: <i><%= familyNameArray[i] %><br></i>
-                        Common name: <b><%= commonNameArray[i] %></b><br/>Genus: <%= genusArray[i] %></div><br />
-                        <button <%= isVisible %> id='<%= idArray[i] %>;<%= imageUrl %>;<%= genusArray[i] %>;<%= scienceNameArray[i] %>;<%= familyNameArray[i] %>;<%= commonNameArray[i] %>;' class='option'>Add to my plants</button>
-                        <br /><br />
+                <% } else if (imageUrlArray.length == 0) { %>
+                    <div class="alert alert-primary" role="alert">
+                    No results found.<br />
                     </div>
-                <% });%>
-            </div>
+                <% } else if (isVisible == "hidden") { %>
+                    <div class="alert alert-warning">Please sign in if you would like to add plants to your collection.</div>
+                <% } %>
+                <button onclick="window.history.back()">Back</button>
+            </section>
+            <br><br>
+            <section>
+                <div class="card-columns">
+                    <% imageUrlArray.forEach(function(imageUrl, i){ %>
+                        <article>
+                            <div class="card bg-light shadow">            
+                                <figure><img class="card-img-top" src='<%= imageUrl %>' width='200' alt='<%= genusArray[i] %>'/></figure>
+                                <figcaption><div class="card-header">Scientific name: <i><%= scienceNameArray[i] %></i></div><div class="card-text">Family: <i><%= familyNameArray[i] %><br></i>
+                                Common name: <b><%= commonNameArray[i] %></b><br/>Genus: <%= genusArray[i] %></div></figcaption><br />
+                                <button <%= isVisible %> id='<%= idArray[i] %>;<%= imageUrl %>;<%= genusArray[i] %>;<%= scienceNameArray[i] %>;<%= familyNameArray[i] %>;<%= commonNameArray[i] %>;' class='option'>Add to my plants</button>
+                                <br /><br />
+                            </div>
+                        </article>
+                    <% });%>
+                </div>
+            </section>
         </main>
         <script src="/js/function.js"></script>
 <!-- footer.ejs partial - footer -->

@@ -1,5 +1,5 @@
 exports.lengthValid = function (input, min, max) {
-    return input ? input.length >= min || input.length <= max: false;
+    return input ? input.length >= min && input.length <= max: false;
 };
 
 exports.alphabetOnly = function (input) {

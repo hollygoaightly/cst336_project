@@ -148,16 +148,39 @@ app.post("/updatePlantProperties", (req,res) => {
     Fertilization = ?
   WHERE
 	  LoginId = ? AND PlantId = ?`;
-	
-	let sqlParams = [req.body.description ,req.body.hardiness, req.body.waterFreq
-	,req.body.soil, req.body.temperature, req.body.lightExposure, req.body.fertilization
-	,req.body.LoginId, req.body.PlantId];
+	 /* not working
+	//input validation
+	if(!validator.lengthValid(req.body.description, 0, 500)) {
+	  res.render("Error: Notes are not within 0 to 500 characters.");
+	}
+	else if(!validator.lengthValid(req.body.hardiness, 0, 50)) {
+	  res.render("Error: Hardiness is not within 0 to 50 characters.");
+	}
+	else if(!validator.lengthValid(req.body.waterFreq, 0, 50)) {
+	  res.render("Error: Water Frequency is not within 0 to 50 characters.");
+	}
+	else if(!validator.lengthValid(req.body.soil, 0, 50)) {
+	  res.render("Error: Soil is not within 0 to 50 characters.");
+	}
+	else if(!validator.lengthValid(req.body.temperature, 0, 50)) {
+	  res.render("Error: Temperature is not within 0 to 50 characters.");
+	}
+	else if(!validator.lengthValid(req.body.lightExposure, 0, 50)) {
+	  res.render("Error: Light Exposure is not within 0 to 50 characters.");
+	}
+	else if(!validator.lengthValid(req.body.fertilization, 0, 50)) {
+	  res.render("Error: Fertilization is not within 0 to 50 characters.");
+	}
+	else { */
+  	let sqlParams = [req.body.description ,req.body.hardiness, req.body.waterFreq
+  	,req.body.soil, req.body.temperature, req.body.lightExposure, req.body.fertilization
+  	,req.body.LoginId, req.body.PlantId];
   
-  pool.query(sql, sqlParams, (err, rows) => {
-    if(err) throw err;
-    console.log(rows.affectedRows.toString());
-  }); //query
-  res.redirect("/yourPlants");
+    pool.query(sql, sqlParams, (err, rows) => {
+      if(err) throw err;
+      console.log(rows.affectedRows.toString());
+      res.send(rows.affectedRows.toString());
+    }); //query
 }); //updatePlantProperties
 
 //plantTalk
@@ -259,7 +282,7 @@ app.post("/signIn", function(req, res) {
   let login = req.body.login;
   let password = req.body.password;
 
-  if (!validator.lengthValid(login, 5, 200) || !validator.lengthValid(password, 8, 20)) {
+  if (!validator.lengthValid(login, 5, 200) || !validator.lengthValid(password, 4, 20)) {
     res.render('signIn', {error: 'login or pass invalid'});
   } else {
     pool.query("SELECT * FROM `Login` WHERE `LoginName` = ?", login, (error, result) => {
@@ -301,7 +324,7 @@ app.post('/register', function(req, res) {
   console.log(req.body);
 
   // an field is missing
-  if (!validator.lengthValid(login, 5, 200) || !validator.lengthValid(password, 8, 20))
+  if (!validator.lengthValid(login, 5, 200) || !validator.lengthValid(password, 4, 20))
   {
     res.render('register', {error: 'Invalid login or password length'});
   } else if (!validator.lengthValid(email, 5, 200)) {
