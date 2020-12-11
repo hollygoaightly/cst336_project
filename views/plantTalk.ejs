@@ -25,14 +25,15 @@
                     </div>
                 </form>
 <!--form for submitting yourPlant to plantTalk -->
-
+      </main>
+      
 <!-- plantTalkContainer start -->
-            <div class="plantTalkContainer">
+            <div class="postsContainer">
 
             </div>
 <!-- plantTalkContainer end -->  
 
-        </main>
+
         
 <!-- footer.ejs partial - footer -->
 <%- include('partials/footer.ejs') %>
@@ -74,28 +75,43 @@
             map[key].push(commentData[i]);
         }
 
-        $(".plantTalkContainer").html("");
+        $(".postsContainer").html("");
+        
+        
         for (let i=0; i< postData.length; i++) {
             key = postData[i].PostId;
             let dtPost = new Date(postData[i].PostDte).toLocaleString();
-            $(".plantTalkContainer").append(`<div id="plantTalkObj">`);
-            $(".plantTalkContainer").append(`<div id="plantTalkUserPlant">`);
-            $(".plantTalkContainer").append(`<h3>${getOutput(postData[i].Topic)}</h3>`);
-            $(".plantTalkContainer").append(`<h5>Post by: ${getOutput(postData[i].LoginName)}</h5>`);
-            $(".plantTalkContainer").append(`<h5>Post Date: ${getOutput(dtPost)}</h5>`);
-            $(".plantTalkContainer").append(`<img src="${getOutput(postData[i].Image_Url)}" class="plantTalkImages" width="30%" height="auto" alt="No Image" /><br />`);
-            $(".plantTalkContainer").append(`Common Name: ${getOutput(postData[i].Common_Name)}<br />`);
-            $(".plantTalkContainer").append(`Scientific Name: ${getOutput(postData[i].Scientific_Name)}<br />`);
-            $(".plantTalkContainer").append(`Family: ${getOutput(postData[i].Family)}<br />`);
-            $(".plantTalkContainer").append(`Genus: ${getOutput(postData[i].Genus)}<br />`);
-            $(".plantTalkContainer").append(`USDA Hardiness Zone: ${getOutput(postData[i].Hardiness)}<br />`);
-            $(".plantTalkContainer").append(`Watering Frequency: ${getOutput(postData[i].WaterFrequency)}<br />`);
-            $(".plantTalkContainer").append(`Soil Used: ${getOutput(postData[i].Soil)}<br />`);
-            $(".plantTalkContainer").append(`Light Exposure: ${getOutput(postData[i].LightExposure)}<br />`);
-            $(".plantTalkContainer").append(`Fertilization: ${getOutput(postData[i].Fertilization)}<br />`);
-            $(".plantTalkContainer").append(`User Notes: ${getOutput(postData[i].Description)}<br />`);
-            $(".plantTalkContainer").append(`<textarea name="comment" rows="4" cols="25" readonly>${getOutput(postData[i].PostText)}</textarea>`);
-            $(".plantTalkContainer").append(`</div>`);
+            
+            let postHtml = `
+            <!-- Card -->
+<div class="card bg-dark w-75">
+<img class="card-img-top" src="${getOutput(postData[i].Image_Url)}" alt="${getOutput(postData[i].Common_Name)}">
+  <div class="text-white text-center d-flex align-items-center rgba-black-strong py-5 px-4">
+       <div class="row">
+        <div class="col-xs-6">
+          <h5 class="green-text"><i class="fas fa-leaf"></i> Post by ${getOutput(postData[i].LoginName)} on ${getOutput(dtPost)}</h5>
+          <h3 class="card-title pt-2"><strong>${getOutput(postData[i].Topic)}</strong></h3>
+          <p>${getOutput(postData[i].PostText)}</p>
+        </div>
+        <div class="col-xs-6">
+            <ul class="list-inline float-right text-muted text-right my-0 py-1 pr-3">
+              <li><b>Common Name:</b> ${getOutput(postData[i].Common_Name)}</li>
+              <li><b>Scientific Name: </b>${getOutput(postData[i].Scientific_Name)}</li>
+              <li><b>Family: </b>${getOutput(postData[i].Family)}</li>
+              <li><b>Genus:</b> ${getOutput(postData[i].Genus)}</li>
+              <li><b>USDA Hardiness Zone:</b> ${getOutput(postData[i].Hardiness)}</li>
+              <li><b>Watering Frequency:</b> ${getOutput(postData[i].WaterFrequency)}</li>
+              <li><b>Soil Used:</b> ${getOutput(postData[i].Soil)}</li>
+              <li><b>Light Exposure:</b> ${getOutput(postData[i].LightExposure)}</li>
+              <li><b>Fertilization:</b> ${getOutput(postData[i].Fertilization)}</li>
+              <li><b>User Notes:</b> ${getOutput(postData[i].Description)}</li>
+            </ul>
+        </div>
+		</div>
+  </div>
+<!-- Card -->`
+
+            $(".postsContainer").append(postHtml);
 
             let commentsHTML = '<div class="card bg-light w-75 text-left"><div class="card-header"><span class="fas fa-comment"></span>' +
     '  Recent Comments  <span class="badge badge-success">' + map[key].length + '</span></div><div class="card-text">'+
@@ -109,13 +125,21 @@
                 '<p>' + comment.CommentText + '</p><small class="text-muted">' + 'By ' + comment.LoginName + ' on ' + dtComment + '</small></div></li>';
             }
             commentsHTML += '</ul></div></div>';
-            $(".plantTalkContainer").append(commentsHTML);
-            $(".plantTalkContainer").append(`<br />`);
-            $(".plantTalkContainer").append(`<form action="/addCommment" method="POST"> <input type="hidden" name="postId" value="${postData[i].PostId}"><input type="text" class="form-control" name="userComments" size="125" /><br /><button>Post a Comment</button><br /><br /></form>`);
-            $(".plantTalkContainer").append(`</div>`);
-            $(".plantTalkContainer").append(`</div><br /><br />`);
+            $(".postsContainer").append(commentsHTML);
+            $(".postsContainer").append(`<br />`);
+            $(".postsContainer").append(`<form action="/addCommment" method="POST"><div class="form-group row w-75">
+    <div class="col-sm-10">
+      <input type="hidden" name="postId" value="${postData[i].PostId}"><input type="text" class="form-control" name="userComments" size="125" />
+    </div>
+    <div class="col-sm-2">
+      <input type="submit" class="btn btn-outline-success" value="Post your comment">
+    </div>
+  </div>
+</form>`);
+            $(".postsContainer").append(`</div>`);
+            $(".postsContainer").append(`</div><br /><br />`);
         }
-         $(".plantTalkContainer").append(`</div><br /><br />`);
+         $(".postsContainer").append(`</div><br /><br />`);
     }
     
     // replace null values 
