@@ -9,4 +9,3 @@ Roles: We decided to implement agile workplace philosophy for this small project
 Holly -- web developer, back end dev leader (API), scrum master, team coordinator
 Marianna -- web developer, database leader (MySQL)
 David -- web developer, front end leader (node.js, bootstrap)
-Jordan -- web developer, QA chapter leader
