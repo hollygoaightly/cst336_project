@@ -41,80 +41,85 @@
     $(document).ready(function() {
             populateMyPlants();
             populatePosts();
-
-            async function populateMyPlants() {
-                let url = `/api/getMyPlants`;
-                let response = await fetch(url);
-                let data = await response.json();
-                $("#usersPlant").html("<option> Select a plant to post about </option>");
-                for (let i=0; i< data.length; i++) {
-                    $("#usersPlant").append(`<option value="${data[i].PlantId}"> ${data[i].Common_Name} </option>`);
-                }
-            }
-            
-            async function populatePosts() {
-                // get posts
-                let postUrl = `/api/getPosts`;
-                let postResponse = await fetch(postUrl);
-                let postData = await postResponse.json();
-            
-                // get comments
-                let commentUrl = `/api/getComments`;
-                let commentsResponse = await fetch(commentUrl);
-                let commentData = await commentsResponse.json();
-                // map comments list to post
-                var map = {};
-                for (let i=0; i< postData.length; i++) {
-                    var key = postData[i].PostId;
-                    map[key] = [];
-                }
-                for (let i=0; i< commentData.length; i++) {
-                    var key = commentData[i].PostId;
-                    map[key].push(commentData[i]);
-                }
-    
-                $(".plantTalkContainer").html("");
-                for (let i=0; i< postData.length; i++) {
-                    key = postData[i].PostId;
-                    let dtPost = new Date(postData[i].PostDte).toLocaleString();
-                    $(".plantTalkContainer").append(`<div id="plantTalkObj">`);
-                    $(".plantTalkContainer").append(`<div id="plantTalkUserPlant">`);
-                    $(".plantTalkContainer").append(`<h3>${postData[i].Topic}</h3>`);
-                    $(".plantTalkContainer").append(`<h5>Post by: ${postData[i].LoginName}</h5>`);
-                    $(".plantTalkContainer").append(`<h5>Post Date: ${dtPost}</h5>`);
-                    $(".plantTalkContainer").append(`<img src="${postData[i].Image_Url}" height="100" alt="No Image" /><br />`);
-                    $(".plantTalkContainer").append(`Common Name: ${postData[i].Common_Name}<br />`);
-                    $(".plantTalkContainer").append(`Scientific Name: ${postData[i].Scientific_Name}<br />`);
-                    $(".plantTalkContainer").append(`Family: ${postData[i].Family}<br />`);
-                    $(".plantTalkContainer").append(`Genus: ${postData[i].Genus}<br />`);
-                    $(".plantTalkContainer").append(`USDA Hardiness Zone: ${postData[i].Hardiness}<br />`);
-                    $(".plantTalkContainer").append(`Watering Frequency: ${postData[i].WaterFrequency}<br />`);
-                    $(".plantTalkContainer").append(`Soil Used: ${postData[i].Soil}<br />`);
-                    $(".plantTalkContainer").append(`Light Exposure: ${postData[i].LightExposure}<br />`);
-                    $(".plantTalkContainer").append(`Fertilization: ${postData[i].Fertilization}<br />`);
-                    $(".plantTalkContainer").append(`User Notes: ${postData[i].Description}<br />`);
-                    $(".plantTalkContainer").append(`<textarea name="comment" rows="4" cols="25" readonly>${postData[i].PostText}</textarea>`);
-                    $(".plantTalkContainer").append(`</div>`);
-
-                    let commentsHTML = '<div class="card bg-light w-75 text-left"><div class="card-header"><span class="fas fa-comment"></span>' +
-            '  Recent Comments  <span class="badge badge-success">' + map[key].length + '</span></div><div class="card-text">'+
-            '<ul class="list-group list-group-flush">';
-                    
-                    
-                    for (let j=0; j< map[key].length; j++){
-                        let comment = map[key][j];
-                        let dtComment = new Date(comment.CommentDte).toLocaleString();
-                        commentsHTML += '<li class="list-group-item  list-group-item-light"><div class="d-flex w-100 justify-content-between">' +
-                        '<p>' + comment.CommentText + '</p><small class="text-muted">' + 'By ' + comment.LoginName + ' on ' + dtComment + '</small></div></li>';
-                    }
-                    commentsHTML += '</ul></div></div>';
-                    $(".plantTalkContainer").append(commentsHTML);
-                    $(".plantTalkContainer").append(`<br />`);
-                    $(".plantTalkContainer").append(`<form action="/addCommment" method="POST"> <input type="hidden" name="postId" value="${postData[i].PostId}"><input type="text" class="form-control" name="userComments" size="125" /><br /><button>Post a Comment</button><br /><br /></form>`);
-                    $(".plantTalkContainer").append(`</div>`);
-                    $(".plantTalkContainer").append(`</div><br /><br />`);
-                }
-                 $(".plantTalkContainer").append(`</div><br /><br />`);
-            }
     }); // form load
+    
+    async function populateMyPlants() {
+        let url = `/api/getMyPlants`;
+        let response = await fetch(url);
+        let data = await response.json();
+        $("#usersPlant").html("<option> Select a plant to post about </option>");
+        for (let i=0; i< data.length; i++) {
+            $("#usersPlant").append(`<option value="${data[i].PlantId}"> ${data[i].Common_Name} </option>`);
+        }
+    }
+    
+    async function populatePosts() {
+        // get posts
+        let postUrl = `/api/getPosts`;
+        let postResponse = await fetch(postUrl);
+        let postData = await postResponse.json();
+    
+        // get comments
+        let commentUrl = `/api/getComments`;
+        let commentsResponse = await fetch(commentUrl);
+        let commentData = await commentsResponse.json();
+        // map comments list to post
+        var map = {};
+        for (let i=0; i< postData.length; i++) {
+            var key = postData[i].PostId;
+            map[key] = [];
+        }
+        for (let i=0; i< commentData.length; i++) {
+            var key = commentData[i].PostId;
+            map[key].push(commentData[i]);
+        }
+
+        $(".plantTalkContainer").html("");
+        for (let i=0; i< postData.length; i++) {
+            key = postData[i].PostId;
+            let dtPost = new Date(postData[i].PostDte).toLocaleString();
+            $(".plantTalkContainer").append(`<div id="plantTalkObj">`);
+            $(".plantTalkContainer").append(`<div id="plantTalkUserPlant">`);
+            $(".plantTalkContainer").append(`<h3>${getOutput(postData[i].Topic)}</h3>`);
+            $(".plantTalkContainer").append(`<h5>Post by: ${getOutput(postData[i].LoginName)}</h5>`);
+            $(".plantTalkContainer").append(`<h5>Post Date: ${getOutput(dtPost)}</h5>`);
+            $(".plantTalkContainer").append(`<img src="${getOutput(postData[i].Image_Url)}" class="plantTalkImages" width="30%" height="auto" alt="No Image" /><br />`);
+            $(".plantTalkContainer").append(`Common Name: ${getOutput(postData[i].Common_Name)}<br />`);
+            $(".plantTalkContainer").append(`Scientific Name: ${getOutput(postData[i].Scientific_Name)}<br />`);
+            $(".plantTalkContainer").append(`Family: ${getOutput(postData[i].Family)}<br />`);
+            $(".plantTalkContainer").append(`Genus: ${getOutput(postData[i].Genus)}<br />`);
+            $(".plantTalkContainer").append(`USDA Hardiness Zone: ${getOutput(postData[i].Hardiness)}<br />`);
+            $(".plantTalkContainer").append(`Watering Frequency: ${getOutput(postData[i].WaterFrequency)}<br />`);
+            $(".plantTalkContainer").append(`Soil Used: ${getOutput(postData[i].Soil)}<br />`);
+            $(".plantTalkContainer").append(`Light Exposure: ${getOutput(postData[i].LightExposure)}<br />`);
+            $(".plantTalkContainer").append(`Fertilization: ${getOutput(postData[i].Fertilization)}<br />`);
+            $(".plantTalkContainer").append(`User Notes: ${getOutput(postData[i].Description)}<br />`);
+            $(".plantTalkContainer").append(`<textarea name="comment" rows="4" cols="25" readonly>${getOutput(postData[i].PostText)}</textarea>`);
+            $(".plantTalkContainer").append(`</div>`);
+
+            let commentsHTML = '<div class="card bg-light w-75 text-left"><div class="card-header"><span class="fas fa-comment"></span>' +
+    '  Recent Comments  <span class="badge badge-success">' + map[key].length + '</span></div><div class="card-text">'+
+    '<ul class="list-group list-group-flush">';
+            
+            
+            for (let j=0; j< map[key].length; j++){
+                let comment = map[key][j];
+                let dtComment = new Date(comment.CommentDte).toLocaleString();
+                commentsHTML += '<li class="list-group-item  list-group-item-light"><div class="d-flex w-100 justify-content-between">' +
+                '<p>' + comment.CommentText + '</p><small class="text-muted">' + 'By ' + comment.LoginName + ' on ' + dtComment + '</small></div></li>';
+            }
+            commentsHTML += '</ul></div></div>';
+            $(".plantTalkContainer").append(commentsHTML);
+            $(".plantTalkContainer").append(`<br />`);
+            $(".plantTalkContainer").append(`<form action="/addCommment" method="POST"> <input type="hidden" name="postId" value="${postData[i].PostId}"><input type="text" class="form-control" name="userComments" size="125" /><br /><button>Post a Comment</button><br /><br /></form>`);
+            $(".plantTalkContainer").append(`</div>`);
+            $(".plantTalkContainer").append(`</div><br /><br />`);
+        }
+         $(".plantTalkContainer").append(`</div><br /><br />`);
+    }
+    
+    // replace null values 
+    function getOutput(value) {
+        return (value == null) ? "" : value;
+    }
 </script>

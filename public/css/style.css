@@ -118,6 +118,10 @@ plantTalkComments. */
     border-bottom: 1px solid black;
     font-size: 12px;   
 }
+.plantTalkImages {
+    margin-left: auto;
+    margin-right: auto;  
+}
 /* results.ejs - card column count for the results */
 .card-columns {
     column-count: 5;    
