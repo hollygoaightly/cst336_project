@@ -5,7 +5,16 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const path = require('path');
 const app = express();
-var multerS3 = require('multer-s3');
+const multers3 = require('multer-s3');
+const aws = require('aws-sdk');
+
+// Create S3 service object
+const s3 = new aws.S3({
+    accessKeyId: 'AKIAIJX3N7YO4PRK7NUA',
+    secretAccessKey: '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',
+    apiVersion: '2006-03-01',
+    region: 'us-west-1'
+});
 
 app.engine('html', require('ejs').renderFile);
 app.set("view engine", "ejs");
@@ -16,37 +25,18 @@ app.use(express.urlencoded({ extended: true })); // to support URL-encoded bodie
 const validator = require('./public/js/validator.js');
 const pool = require('./dbPool.js');
 
-// Set The Storage Engine
-const storage = multer.diskStorage({
-  destination: './public/uploads/',
-  filename: function(req, file, cb){
-    cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-  }
-});
-
-// Check File Type
-function checkFileType(file, cb){
-  // Allowed ext
-  const filetypes = /jpeg|jpg|png|gif/;
-  // Check ext
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  // Check mime
-  const mimetype = filetypes.test(file.mimetype);
-
-  if(mimetype && extname){
-    return cb(null,true);
-  } else {
-    cb('Error: Images Only!');
-  }
-}
-
-// Init Upload
-const upload = multer({
-  storage: storage,
-  limits:{fileSize: 1000000},
-  fileFilter: function(req, file, cb){
-    checkFileType(file, cb);
-  }
+const uploadS3 = multer({
+  storage: multers3({
+    s3: s3,
+    acl: 'public-read',
+    bucket: 'csumb-marianna',
+    metadata: (req, file, cb) => {
+      cb(null, {fieldName: file.fieldname})
+    },
+    key: (req, file, cb) => {
+      cb(null, Date.now().toString() + '-' + file.originalname)
+    }
+  })
 });
 
 app.use(session({
@@ -175,7 +165,7 @@ app.get("/plantTalk", ifNotLoggedin, async (req, res) => {
 }); //plantTalk
 
 //plantTalk post
-app.post("/plantTalk", upload.single('file1'), function (req, res, next) {
+app.post("/plantTalk", uploadS3.single('file1'), function (req, res, next) {
   const file = req.file;
   let topic = req.body.topic;
   let posttext = req.body.posttext;
@@ -205,7 +195,7 @@ app.post("/plantTalk", upload.single('file1'), function (req, res, next) {
     res.render('plantTalk', {message: `Please enter a post`});
   }
   else{
-    let filepath = req.file.path;
+    let filepath = req.file.location;
     pool.query("INSERT INTO Post (PlantId, PostDte, Topic, PostText, Image_Url, LoginId) VALUES (?, CURRENT_TIMESTAMP(), ?, ?, ?, ?)",
                   [plantid, topic, posttext, filepath, req.session.login_id], function (err, rows, fields) {
           if (err) throw err;
@@ -246,7 +236,6 @@ app.post("/addCommment",  function(req, res) {
         });
   }
 });
-
 
 // get Plant Talk comments
 app.get("/api/getComments",  function(req, res) {
