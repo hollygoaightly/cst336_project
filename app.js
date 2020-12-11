@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const path = require('path');
 const app = express();
+var multerS3 = require('multer-s3');
 
 app.engine('html', require('ejs').renderFile);
 app.set("view engine", "ejs");
@@ -77,7 +78,7 @@ app.get("/", async (req, res) => {
 	res.render("home",{"isLoggedIn":req.session.logged_in}); //render
 }); //root
 
-app.get("/api/insertPlant", function(req, res){
+app.get("/api/insertPlant", function(req, res) {
   let sql = "INSERT IGNORE INTO `Plant` (TrefleId, Common_Name, Scientific_Name, Family, Genus, Image_Url) VALUES (?,?,?,?,?,?)";
   let sqlParams = [req.query.id,
     decodeURIComponent(req.query.common_name),
@@ -103,7 +104,7 @@ app.get("/api/insertPlant", function(req, res){
   });
 });
 
-app.get("/api/insertLoginPlant", function(req, res){
+app.get("/api/insertLoginPlant", function(req, res) {
   if(req.session.logged_in){
     // check if plant is already in collection
     pool.query("SELECT * FROM LoginPlant WHERE LoginId=? AND PlantId=?", [req.session.login_id, decodeURIComponent(req.query.id)], function (error, result) {
@@ -122,13 +123,49 @@ app.get("/api/insertLoginPlant", function(req, res){
 });
 
 //yourPlants : requires login
-app.get("/yourplants", ifNotLoggedin, (req,res,next) => {
-    pool.query("SELECT `FirstName` FROM `Login` WHERE `LoginId`= ?",
-    [req.session.login_id], (err, rows ) => {
-    if (err) throw err;
-	res.render("yourPlants", {"isLoggedIn":req.session.logged_in, name: rows[0].FirstName}); //render
-    }); // query : get firstname from db
+app.get("/yourPlants", ifNotLoggedin, (req,res,next) => {
+
+  let sql = `SELECT Description, Hardiness, WaterFrequency, Soil, 
+  Temperature, LightExposure, Fertilization, FirstName, Common_Name,
+  Scientific_Name, Family, Genus, Image_Url, LoginPlant.PlantId, LoginPlant.LoginId
+  FROM Plant
+	  INNER JOIN LoginPlant
+      ON Plant.PlantId = LoginPlant.PlantId
+    INNER JOIN Login
+	    ON LoginPlant.LoginId = Login.LoginId
+  WHERE Login.LoginId = ?`;
+  
+    pool.query(sql, [req.session.login_id], (err, rows ) => {
+      if (err) throw err;
+      res.render("yourPlants", {"isLoggedIn":req.session.logged_in, yourPlantsArray: rows}); //render
+    }); //query
 }); //yourPlants
+
+//updatePlantProperties
+app.post("/updatePlantProperties", (req,res) => {
+
+  let sql = `UPDATE LoginPlant
+  SET
+	  Description = ?,
+    Hardiness = ?,
+    WaterFrequency = ?,
+    Soil = ?,
+    Temperature = ?,
+    LightExposure = ?,
+    Fertilization = ?
+  WHERE
+	  LoginId = ? AND PlantId = ?`;
+	
+	let sqlParams = [req.body.description ,req.body.hardiness, req.body.waterFreq
+	,req.body.soil, req.body.temperature, req.body.lightExposure, req.body.fertilization
+	,req.body.LoginId, req.body.PlantId];
+  
+  pool.query(sql, sqlParams, (err, rows) => {
+    if(err) throw err;
+    console.log(rows.affectedRows.toString());
+  }); //query
+  res.redirect("/yourPlants");
+}); //updatePlantProperties
 
 //plantTalk
 app.get("/plantTalk", ifNotLoggedin, async (req, res) => {
@@ -140,22 +177,41 @@ app.get("/plantTalk", ifNotLoggedin, async (req, res) => {
 //plantTalk post
 app.post("/plantTalk", upload.single('file1'), function (req, res, next) {
   const file = req.file;
-  if (!file) {
-    const error = new Error('Please upload a file');
-    error.httpStatusCode = 400;
-    return next(error);
-  }
-      
-	let topic = req.body.topic;
+  let topic = req.body.topic;
   let posttext = req.body.posttext;
   let plantid = req.body.usersPlant;
-  let filepath = req.file.path;
-
-  pool.query("INSERT INTO Post (PlantId, PostDte, Topic, PostText, Image_Url, LoginId) VALUES (?, CURRENT_TIMESTAMP(), ?, ?, ?, ?)",
+  if (!file) {
+    //const error = new Error('Please upload a file');
+    //error.httpStatusCode = 400;
+    //return next(error);
+    res.render('plantTalk', {message: `Please upload a file`});
+  }
+  else if (plantid== "Select a plant to post about") {
+    //const error = new Error('Please select a plant');
+    //error.httpStatusCode = 400;
+    //return next(error);
+    res.render('plantTalk', {message: `Please select a plant`});
+  }
+  else if (topic.length == 0) {
+    //const error = new Error('Please enter a topic');
+    //error.httpStatusCode = 400;
+    //return next(error);
+    res.render('plantTalk', {message: `Please enter a topic`});
+  }
+  else if (posttext.length == 0) {
+    //const error = new Error('Please enter a post');
+    //error.httpStatusCode = 400;
+    //return next(error);
+    res.render('plantTalk', {message: `Please enter a post`});
+  }
+  else{
+    let filepath = req.file.path;
+    pool.query("INSERT INTO Post (PlantId, PostDte, Topic, PostText, Image_Url, LoginId) VALUES (?, CURRENT_TIMESTAMP(), ?, ?, ?, ?)",
                   [plantid, topic, posttext, filepath, req.session.login_id], function (err, rows, fields) {
           if (err) throw err;
           res.render('plantTalk', {message: `You post was published successfully.`});
-        });
+    });
+  }
 }); //plantTalk post
 
 app.get("/api/getMyPlants",  function(req, res) {
@@ -175,9 +231,26 @@ app.get("/api/getPosts",  function(req, res) {
   });  
 });
 
+// post Plant Talk comments
+app.post("/addCommment",  function(req, res) {
+  let postId = req.body.postId;
+  let comment = req.body.userComments;
+  if(comment.length == 0){
+    res.render('plantTalk', {message: `Please add a comment`});
+  }
+  else{
+    pool.query("INSERT INTO Comment (PostId, CommentDte, LoginId, CommentText) VALUES (?, CURRENT_TIMESTAMP(), ?, ?)",
+                  [postId, req.session.login_id, comment], function (err, rows, fields) {
+          if (err) throw err;
+          res.render('plantTalk', {message: `You comment was published successfully.`});
+        });
+  }
+});
+
+
 // get Plant Talk comments
 app.get("/api/getComments",  function(req, res) {
-  let sql = "SELECT * FROM Comment c INNER JOIN Login l on c.LoginId = l.LoginId ORDER BY CommentDte DESC";
+  let sql = "SELECT PostId, CommentDte, LoginName, CommentText FROM Comment c INNER JOIN Login l on c.LoginId = l.LoginId ORDER BY CommentDte DESC";
   pool.query(sql, function (err, rows) {
      if (err) console.log(err);
      res.send(rows);
@@ -250,20 +323,20 @@ app.post('/register', function(req, res) {
   } else {
         // Check if email exists
         pool.query("SELECT * FROM Login WHERE Email=?", [email], function (error, result) {
+        if (error) throw error;
+        if (result.length > 0) { res.render('register', {error: 'This email already exists'}); }
+        else {
+          bcrypt.genSalt(10, function(error, salt) {
             if (error) throw error;
-            if (result.length > 0) { res.render('register', {error: 'This email already exists'}); }
-            else {
-              bcrypt.genSalt(10, function(error, salt) {
-                if (error) throw error;
-                bcrypt.hash(password, salt, function(error, hash) {
-                  if (error) throw error;
-                  pool.query("INSERT INTO Login (LoginName, HashedPwd, Email, FirstName, LastName, Gender, ZipCode) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                  [login, hash, email, fname, lname, gender, zip], function(error, result) {
-                    res.render('register', {message: `You have been registered, try logging in`});
-                  });
-                });
+            bcrypt.hash(password, salt, function(error, hash) {
+              if (error) throw error;
+              pool.query("INSERT INTO Login (LoginName, HashedPwd, Email, FirstName, LastName, Gender, ZipCode) VALUES (?, ?, ?, ?, ?, ?, ?)",
+              [login, hash, email, fname, lname, gender, zip], function(error, result) {
+                res.render('register', {message: `You have been registered, try logging in`});
               });
-            } });
+            });
+          });
+        } });
   }
 });
 

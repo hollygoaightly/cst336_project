@@ -79,7 +79,7 @@
                     let dtPost = new Date(postData[i].PostDte).toLocaleString();
                     $(".plantTalkContainer").append(`<div id="plantTalkObj">`);
                     $(".plantTalkContainer").append(`<div id="plantTalkUserPlant">`);
-                    $(".plantTalkContainer").append(`<span id="plantTalkObjects"></span>`);
+                    $(".plantTalkContainer").append(`<h3>${postData[i].Topic}</h3>`);
                     $(".plantTalkContainer").append(`<h5>Post by: ${postData[i].LoginName}</h5>`);
                     $(".plantTalkContainer").append(`<h5>Post Date: ${dtPost}</h5>`);
                     $(".plantTalkContainer").append(`<img src="${postData[i].Image_Url}" height="100" alt="No Image" /><br />`);
@@ -105,8 +105,7 @@
                         let comment = map[key][j];
                         let dtComment = new Date(comment.CommentDte).toLocaleString();
                         commentsHTML += '<li class="list-group-item  list-group-item-light"><div class="d-flex w-100 justify-content-between">' +
-                        '<small class="text-muted">' + 'By ' + comment.LoginName + ' on ' + dtComment + '</small><p class="mb-1">' + 
-                        comment.CommentText + '</p></div></li>';
+                        '<p>' + comment.CommentText + '</p><small class="text-muted">' + 'By ' + comment.LoginName + ' on ' + dtComment + '</small></div></li>';
                     }
                     commentsHTML += '</ul></div></div>';
                     $(".plantTalkContainer").append(commentsHTML);
