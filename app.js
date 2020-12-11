@@ -4,14 +4,17 @@ const multer = require('multer');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const path = require('path');
-const app = express();
+const dotenv = require('dotenv');
+dotenv.config();
 const multers3 = require('multer-s3');
 const aws = require('aws-sdk');
 
+const app = express();
+
 // Create S3 service object
 const s3 = new aws.S3({
-    accessKeyId: 'AKIAIJX3N7YO4PRK7NUA',
-    secretAccessKey: '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',
+    accessKeyId: `${process.env.AWS_ACCESS_KEY_ID}`,
+    secretAccessKey: `${process.env.AWS_SECRET_ACCESS_KEY}`,
     apiVersion: '2006-03-01',
     region: 'us-west-1'
 });
