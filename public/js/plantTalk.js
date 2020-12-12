@@ -1,7 +1,7 @@
 $(document).ready(function() {
             populateMyPlants();
             populatePosts();
-); // form load
+}); // form load
     
 async function populateMyPlants() {
     let url = `/api/getMyPlants`;

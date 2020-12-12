@@ -15,8 +15,11 @@ window.onload = function(){
         } //for
     }//loadMenu
     
-    $('button[id=saveButton]').on("click", async () => {
-        
+    $('button[id=saveButton]').on("click", async (e) => {
+        //i think having this prevents the bug where a race condition
+        //occurrs leading to a db call to be successful but not provide
+        //user with feedback
+        e.preventDefault();
         const pos = $('button[id=saveButton]').index($(event.target));
         
         //gather all data
@@ -36,17 +39,18 @@ window.onload = function(){
             description:description, LoginId:LoginId, PlantId:PlantId,
             fertilization:fertilization
         }
-        
+
         let data = await fetch(url, {
             method: 'POST',
-            body: JSON.stringify(inputtedData),
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify(inputtedData)
         });
         
         let response = await data.json();
-
+        
+        console.log(response.message);
         alert(response.message);
     });
     

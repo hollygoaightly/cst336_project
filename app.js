@@ -135,7 +135,7 @@ app.get("/yourPlants", ifNotLoggedin, (req,res,next) => {
 }); //yourPlants
 
 //updatePlantProperties
-app.post("/updatePlantProperties", async (req,res) => {
+app.post("/updatePlantProperties", (req,res) => {
 
   let sql = `UPDATE LoginPlant
   SET
@@ -181,7 +181,7 @@ app.post("/updatePlantProperties", async (req,res) => {
       console.log(rows.affectedRows.toString());
       res.send({message:"Your plant data was saved!"});
     }); //query
-	}
+	} //if else
 }); //updatePlantProperties
 
 //plantTalk
