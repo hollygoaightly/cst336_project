@@ -18,7 +18,7 @@
                 <% } else if (isVisible == "hidden") { %>
                     <div class="alert alert-warning">Please sign in if you would like to add plants to your collection.</div>
                 <% } %>
-                <button onclick="window.history.back()">Back</button>
+                <button class="btn btn-outline-success" onclick="window.history.back()">Back</button>
             </section>
             <br><br>
             <section>
@@ -29,7 +29,7 @@
                                 <figure><img class="card-img-top" src='<%= imageUrl %>' width='200' alt='<%= genusArray[i] %>'/></figure>
                                 <figcaption><div class="card-header">Scientific name: <i><%= scienceNameArray[i] %></i></div><div class="card-text">Family: <i><%= familyNameArray[i] %><br></i>
                                 Common name: <b><%= commonNameArray[i] %></b><br/>Genus: <%= genusArray[i] %></div></figcaption><br />
-                                <button <%= isVisible %> id='<%= idArray[i] %>;<%= imageUrl %>;<%= genusArray[i] %>;<%= scienceNameArray[i] %>;<%= familyNameArray[i] %>;<%= commonNameArray[i] %>;' class='option'>Add to my plants</button>
+                                <button <%= isVisible %> id='<%= idArray[i] %>;<%= imageUrl %>;<%= genusArray[i] %>;<%= scienceNameArray[i] %>;<%= familyNameArray[i] %>;<%= commonNameArray[i] %>;' class='option btn btn-outline-success'>Add to my plants</button>
                                 <br /><br />
                             </div>
                         </article>

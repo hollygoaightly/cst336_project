@@ -9,7 +9,7 @@
             <br />
             <section>
                 <form action="/findPlants">
-                    <button>Add Plant</button>
+                    <button class="btn btn-outline-success">Add Plant</button>
                 </form>
             </section>
             <br />
@@ -50,7 +50,7 @@
                                             <textarea name="description" rows="4" cols="30"><%= yourPlantObj.Description %></textarea>
                                             <input type="hidden" name="LoginId" value="<%= yourPlantObj.LoginId %>" />
                                             <input type="hidden" name="PlantId" value="<%= yourPlantObj.PlantId %>" />
-                                            <button id="saveButton">Save</button>
+                                            <button id="saveButton" class="btn btn-outline-success">Save</button>
                                         </form>
                                     </div>
                                 </figcaption>
