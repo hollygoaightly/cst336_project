@@ -48,12 +48,12 @@ async function populatePosts() {
 <img class="card-img-top" src="${getOutput(postData[i].Image_Url)}" alt="${getOutput(postData[i].Common_Name)}">
 <div class="text-white text-center d-flex align-items-center rgba-black-strong py-5 px-4">
  
-    <div class="col-xs-6">
+    <div class="col-xs-6 w-75">
       <h5 class="text-success"><i class="fas fa-leaf"></i> Post by ${getOutput(postData[i].LoginName)} on ${getOutput(dtPost)}</h5>
       <h3 class="card-title pt-2"><strong>${getOutput(postData[i].Topic)}</strong></h3>
       <p>${getOutput(postData[i].PostText)}</p>
     </div>
-    <div class="col-xs-6">
+    <div class="col-xs-6 w-75">
         <ul class="list-inline float-right text-muted text-right my-0 py-1 pr-3">
           <li><b>Common Name:</b> ${getOutput(postData[i].Common_Name)}</li>
           <li><b>Scientific Name: </b>${getOutput(postData[i].Scientific_Name)}</li>
