@@ -84,10 +84,10 @@
             
             let postHtml = `
             <!-- Card -->
-<div class="card bg-dark w-75">
+<div class="card bg-dark">
 <img class="card-img-top" src="${getOutput(postData[i].Image_Url)}" alt="${getOutput(postData[i].Common_Name)}">
   <div class="text-white text-center d-flex align-items-center rgba-black-strong py-5 px-4">
-       <div class="row">
+     
         <div class="col-xs-6">
           <h5 class="text-success"><i class="fas fa-leaf"></i> Post by ${getOutput(postData[i].LoginName)} on ${getOutput(dtPost)}</h5>
           <h3 class="card-title pt-2"><strong>${getOutput(postData[i].Topic)}</strong></h3>
@@ -107,13 +107,13 @@
               <li><b>User Notes:</b> ${getOutput(postData[i].Description)}</li>
             </ul>
         </div>
-		</div>
+		
   </div>
 <!-- Card -->`
 
             $(".postsContainer").append(postHtml);
 
-            let commentsHTML = '<div class="card bg-light w-75 text-left"><div class="card-header"><span class="fas fa-comment"></span>' +
+            let commentsHTML = '<div class="card bg-light text-left"><div class="card-header"><span class="fas fa-comment"></span>' +
     '  Recent Comments  <span class="badge badge-success">' + map[key].length + '</span></div><div class="card-text">'+
     '<ul class="list-group list-group-flush">';
             

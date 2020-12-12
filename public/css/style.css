@@ -92,10 +92,11 @@ footer {
 }
 /* plantTalk.ejs - plantTalkContainer contains all the plantTalkObjects */
 /* display stlying */
-.plantTalkContainer {
+.postsContainer {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin: 0 10% auto;
 }
 /* plantTalk.ejs - plantTalkObj contains all the user's plantTalkUserPlant and
 plantTalkComments. */
