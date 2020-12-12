@@ -4,7 +4,9 @@
 <!-- index.ejs - main content -->
         <main>
             <header>
-                <p><%= yourPlantsArray[0].FirstName %>'s Plants</p>
+                <% if(yourPlantsArray.length != 0) { %>
+                    <p><%= yourPlantsArray[0].FirstName %>'s Plants</p>
+                <% } %>
             </header>
             <br />
             <section>
@@ -16,47 +18,53 @@
 <!-- yourPlantsContainer start -->
             <section>
                 <div class="yourPlantsContainer">
-                    <% yourPlantsArray.forEach((yourPlantObj,i) => { %>
-<!-- plantObj start -->
-                    <article>
-                        <div class="plantObj rounded shadow">
-                                <div id="plantProperties">
-                                    <div class="card bg-light"> 
-                                        <figure>
-                                            <img class="card-img-top" src="<%= yourPlantObj.Image_Url %>" alt="plant common name <%= yourPlantObj.Common_Name %>"  />
-                                        </figure>
-                                        <figcaption>
-                                            <div class="card-header">
-                                                Scientific Name: <%= yourPlantObj.Scientific_Name %>
-                                            </div>
-                                            <div class="card-text">
-                                                Common Name: <%= yourPlantObj.Common_Name %><br />
-                                                Family: <%= yourPlantObj.Family %><br />
-                                                Genus: <%= yourPlantObj.Genus %><br />
-                                            </div>
-                                        </figcaption>
-                                    </div>
-                                </div>
-                                <figcaption>
+                    <% if(yourPlantsArray.length == 0) { %>
+                        <div class="alert alert-primary fade show" role="alert">
+                            You don't have any plants!
+                        </div>
+                    <% } 
+                    else {
+                        yourPlantsArray.forEach((yourPlantObj,i) => { %>
+    <!-- plantObj start -->
+                        <article>
+                            <div class="plantObj rounded shadow">
                                     <div id="plantProperties">
-                                        <form>
-                                            USDA Hardiness Zone(50 Char Max):<br /><input type="text" name="hardiness" size="31" value="<%= yourPlantObj.Hardiness %>" /><br />
-                                            Watering Frequency(50 Char Max):<br /><input type="text" name="waterFreq" size="31" value="<%= yourPlantObj.WaterFrequency %>" /><br />
-                                            Soil Used(50 Char Max):<br /><input type="text" name="soil" size="31" value="<%= yourPlantObj.Soil %>" /><br />
-                                            Temperature(50 Char Max):<br /><input type="text" name="temperature" size="31" value="<%= yourPlantObj.Temperature %>" /><br />
-                                            Light Exposure(50 Char Max):<br /><input type="text" name="lightExposure" size="31" value="<%= yourPlantObj.LightExposure %>" /><br />
-                                            Fertilization(50 Char Max):<br /><input type="text" name="fertilization" size="31" value="<%= yourPlantObj.Fertilization %>" /><br />
-                                            Notes(500 Char Max):<br />
-                                            <textarea name="description" rows="4" cols="30"><%= yourPlantObj.Description %></textarea>
-                                            <input type="hidden" name="LoginId" value="<%= yourPlantObj.LoginId %>" />
-                                            <input type="hidden" name="PlantId" value="<%= yourPlantObj.PlantId %>" />
-                                            <button id="saveButton" class="btn btn-outline-success">Save</button>
-                                        </form>
+                                        <div class="card bg-light"> 
+                                            <figure>
+                                                <img class="card-img-top" src="<%= yourPlantObj.Image_Url %>" alt="plant common name <%= yourPlantObj.Common_Name %>"  />
+                                            </figure>
+                                            <figcaption>
+                                                <div class="card-header">
+                                                    Scientific Name: <%= yourPlantObj.Scientific_Name %>
+                                                </div>
+                                                <div class="card-text">
+                                                    Common Name: <%= yourPlantObj.Common_Name %><br />
+                                                    Family: <%= yourPlantObj.Family %><br />
+                                                    Genus: <%= yourPlantObj.Genus %><br />
+                                                </div>
+                                            </figcaption>
+                                        </div>
                                     </div>
-                                </figcaption>
-                            </div>
-                        </article>
-                    <% }); %>
+                                    <figcaption>
+                                        <div id="plantProperties">
+                                            <form>
+                                                USDA Hardiness Zone(50 Char Max):<br /><input type="text" name="hardiness" size="31" value="<%= yourPlantObj.Hardiness %>" /><br />
+                                                Watering Frequency(50 Char Max):<br /><input type="text" name="waterFreq" size="31" value="<%= yourPlantObj.WaterFrequency %>" /><br />
+                                                Soil Used(50 Char Max):<br /><input type="text" name="soil" size="31" value="<%= yourPlantObj.Soil %>" /><br />
+                                                Temperature(50 Char Max):<br /><input type="text" name="temperature" size="31" value="<%= yourPlantObj.Temperature %>" /><br />
+                                                Light Exposure(50 Char Max):<br /><input type="text" name="lightExposure" size="31" value="<%= yourPlantObj.LightExposure %>" /><br />
+                                                Fertilization(50 Char Max):<br /><input type="text" name="fertilization" size="31" value="<%= yourPlantObj.Fertilization %>" /><br />
+                                                Notes(500 Char Max):<br />
+                                                <textarea name="description" rows="4" cols="30"><%= yourPlantObj.Description %></textarea>
+                                                <input type="hidden" name="LoginId" value="<%= yourPlantObj.LoginId %>" />
+                                                <input type="hidden" name="PlantId" value="<%= yourPlantObj.PlantId %>" />
+                                                <button id="saveButton" class="btn btn-outline-success">Save</button>
+                                            </form>
+                                        </div>
+                                    </figcaption>
+                                </div>
+                            </article>
+                    <% });} %>
 <!-- plantObj end -->
                 </div>
             </section>
