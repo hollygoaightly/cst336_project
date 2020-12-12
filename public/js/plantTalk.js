@@ -43,6 +43,7 @@ async function populatePosts() {
         
         let postHtml = `
         <!-- Card -->
+<article>
 <div class="card bg-dark">
 <img class="card-img-top" src="${getOutput(postData[i].Image_Url)}" alt="${getOutput(postData[i].Common_Name)}">
 <div class="text-white text-center d-flex align-items-center rgba-black-strong py-5 px-4">
@@ -66,13 +67,14 @@ async function populatePosts() {
           <li><b>User Notes:</b> ${getOutput(postData[i].Description)}</li>
         </ul>
     </div>
-	
 </div>
-<!-- Card -->`
+</div>
+</article>
+<!-- Card -->`;
 
         $(".postsContainer").append(postHtml);
 
-        let commentsHTML = '<div class="card bg-light text-left"><div class="card-header"><span class="fas fa-comment"></span>' +
+        let commentsHTML = '<article><div class="card bg-light text-left"><div class="card-header"><span class="fas fa-comment"></span>' +
 '  Recent Comments  <span class="badge badge-success">' + map[key].length + '</span></div><div class="card-text">'+
 '<ul class="list-group list-group-flush">';
         
@@ -86,7 +88,7 @@ async function populatePosts() {
         commentsHTML += '</ul></div></div>';
         $(".postsContainer").append(commentsHTML);
         $(".postsContainer").append(`<br />`);
-        $(".postsContainer").append(`<form action="/addCommment" method="POST"><div class="form-group row w-75">
+        $(".postsContainer").append(`<article><form action="/addCommment" method="POST"><div class="form-group row w-75">
 <div class="col-sm-10">
   <input type="hidden" name="postId" value="${postData[i].PostId}"><input type="text" class="form-control" name="userComments" size="125" />
 </div>
@@ -94,11 +96,11 @@ async function populatePosts() {
   <input type="submit" class="btn btn-outline-success" value="Post your comment">
 </div>
 </div>
-</form>`);
+</form></article>`);
         $(".postsContainer").append(`</div>`);
         $(".postsContainer").append(`</div><br /><br />`);
     }
-     $(".postsContainer").append(`</div><br /><br />`);
+     $(".postsContainer").append(`</div></article><br /><br />`);
 }
 
 // replace null values with empty strings

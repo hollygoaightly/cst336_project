@@ -3,9 +3,11 @@
 
 <!-- index.ejs - main content -->
         <main>
-            <p>Posts</p>
-
+            <header>
+                <p>Posts</p>
+            </header>
 <!--form for submitting yourPlant to plantTalk -->
+            <section>
                 <% if (typeof message !== "undefined" && message) {%>
                 <div class="alert alert-info fade show" role="alert">
                   <strong><%= message %></strong>
@@ -24,13 +26,16 @@
                     <input type="submit" class="btn btn-outline-success" value="Post Your Plant"><br /><br />
                     </div>
                 </form>
+            </section>
 <!--form for submitting yourPlant to plantTalk -->
       </main>
       
 <!-- plantTalkContainer start -->
-            <div class="postsContainer">
-
-            </div>
+            <section>
+                <div class="postsContainer">
+    
+                </div>
+            </section>
 <!-- plantTalkContainer end -->  
 
 
