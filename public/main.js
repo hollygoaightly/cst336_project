@@ -46,11 +46,8 @@ window.onload = function(){
         });
         
         let response = await data.json();
-        
-        if(response == 1) {
-            alert("Your plant data has been saved successfully!");
-        }
-        
+
+        alert(response.message);
     });
     
 };

@@ -1,4 +1,10 @@
 exports.lengthValid = function (input, min, max) {
+  console.log(`input: ${input}`);
+  console.log(`min: ${min}`);
+  console.log(`max: ${max}`);
+  console.log(`min len: ${input.length >= min}`);
+  console.log(`max len: ${input.length <= max}`);
+  console.log(`condition: ${input.length >= min && input.length <= max}`);
     return input ? input.length >= min && input.length <= max: false;
 };
 
